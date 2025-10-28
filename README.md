@@ -13,5 +13,5 @@ Tool diagnostico per refertazione istologica della placenta secondo linee guida 
 
 **Usa:** Apri `index.html` nel browser
 
-**Autore:** Dr. [Nome]
-EOF
+**Autore:** Dr. Fiippo Bianchi
+
