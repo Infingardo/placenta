@@ -628,7 +628,7 @@
 
         function genera_referto() {
             try {
-                const ega_clinica = parseInt(document.getElementById('ega_clinica').value);
+                const ega_clinica = parseInt(document.getElementById('ega_clinica_sett').value);
                 const peso_placenta = document.getElementById('peso_placenta').value;
                 const spessore = document.getElementById('spessore').value;
                 const lunghezza_cordone = document.getElementById('lunghezza_cordone').value;
@@ -749,14 +749,14 @@
                         </ul>`;
                 } else if (!infarti_presente && villite_presente && !calcif_patologica) {
                     conclusione = `<strong>VILLITE - FORTEMENTE SOSPETTA INFEZIONE CONGENITA</strong><br><br>
-                        Riscontrata infiammazione significativa dei villi coriali con infiltrato cellulare ${document.getElementById('villite_grado').value.toLowerCase()}, pattern istologico classicamente associato a infezioni intrauterine congenite. Le possibili eziologie includono: <strong>CMV (più frequente)</strong>, tossoplasma, sifilide, listeria, virus varicella-zoster, epatite E, parvovirus B19. La villite riflette una risposta immunitaria fetale/placentare all'agente patogeno, con rischio significativo di trasmissione verticale e sequele neonatali (danno neurologico, ipossia, prematurità, basso peso).<br><br>
+                        Riscontrata infiammazione significativa dei villi coriali con infiltrato cellulare ${document.getElementById('villite_grado').value.toLowerCase()}, pattern istologico classicamente associato a infezioni intrauterine congenite. Le possibili eziologie includono: <strong>CMV (più frequente)</strong>, toxoplasma, sifilide, listeria, virus varicella-zoster, epatite E, parvovirus B19. La villite riflette una risposta immunitaria fetale/placentare all'agente patogeno, con rischio significativo di trasmissione verticale e sequele neonatali (danno neurologico, ipossia, prematurità, basso peso).<br><br>
                         <strong>Significato clinico:</strong> URGENTE - Questo reperto richiede approfondimento serologico e molecolare immediato per identificare l'eziologia e stratificare il rischio neonatale. Le infezioni congenite hanno tassi di sequela del 10-25% (sordità, ritardo psicomotorio, retinopatia, epatosplenomegalia).<br><br>
                         <strong>Workup URGENTE consigliato:</strong>
                         <ul class="workup-list">
                             <li><strong>Serologica materna STAT:</strong> CMV IgG/IgM, Toxo IgG/IgM, RPR/TPPA (sifilide), listeria sierologia, varicella IgG/IgM, parvovirus IgG/IgM</li>
                             <li><strong>PCR liquor neonatale (ASAP):</strong> CMV, toxo, listeria, HSV-1/HSV-2, VZV se disponibili</li>
                             <li><strong>Istologia placentare aggiuntiva:</strong> Ricerca inclusioni citomegaliche, coloranti speciali (PAS, Giemsa) per identificare microrganismi</li>
-                            <li><strong>Follow-up pediatrico urgente:</strong> Valutazione audiologica (per CMV/tossoplasma), oftalmologia (retinopatia), neurologia (anomalie sviluppo), imaging cerebrale se indicato</li>
+                            <li><strong>Follow-up pediatrico urgente:</strong> Valutazione audiologica (per CMV/toxoplasma), oftalmologia (retinopatia), neurologia (anomalie sviluppo), imaging cerebrale se indicato</li>
                             <li><strong>Counseling genitoriale:</strong> Spiegare diagnosi presunta, possibili esiti, necessità di follow-up neonatale prolungato, trattamenti disponibili (ganciclovir per CMV neonatale, ecc.)</li>
                         </ul>`;
                 } else if (!infarti_presente && !villite_presente && calcif_patologica) {
