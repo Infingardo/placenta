@@ -1,4 +1,4 @@
-cat > README.md << 'EOF'
+
 # Placenta - Esame Macro- e Microscopico
 
 Tool diagnostico per refertazione istologica della placenta secondo linee guida internazionali.
