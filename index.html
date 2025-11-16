@@ -3,227 +3,387 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Referto Istologico Placenta</title>
+    <title>Esame Istologico della Placenta</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
-            padding: 20px;
-            color: #333;
+        :root {
+            --bg: #f8f9fa;
+            --bg-card: #ffffff;
+            --border: #e8eaed;
+            --border-subtle: #efefef;
+            --accent: #2563eb;
+            --accent-soft: rgba(37,99,235,0.08);
+            --danger: #dc2626;
+            --danger-soft: rgba(220,38,38,0.08);
+            --warn: #d97706;
+            --warn-soft: rgba(217,119,6,0.08);
+            --ok: #16a34a;
+            --ok-soft: rgba(22,163,74,0.08);
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --chip-bg: #f3f4f6;
         }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+        }
+
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            background: var(--bg-card);
+            border-radius: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             overflow: hidden;
         }
+
         .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            background: linear-gradient(135deg, var(--accent), #1d4ed8);
             color: white;
-            padding: 30px;
+            padding: 2.5rem;
             text-align: center;
         }
-        .header h1 { font-size: 26px; margin-bottom: 8px; }
-        .header p { font-size: 13px; opacity: 0.9; }
+
+        .header h1 { 
+            font-size: 1.75rem; 
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.02em;
+        }
+
+        .header p { 
+            font-size: 0.9rem; 
+            opacity: 0.9;
+        }
+
         .content {
-            padding: 30px;
+            padding: 2rem;
         }
+
         .section {
-            margin-bottom: 25px;
-            padding: 20px;
-            background: #f9fafc;
-            border-left: 5px solid #3498db;
-            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 0.8rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
+
         .section-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 15px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            font-weight: 600;
         }
+
         .field-group {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 0.9rem 1.2rem;
+            margin-bottom: 0.6rem;
         }
-        .field-group.full { grid-template-columns: 1fr; }
+
+        .field-group.full { 
+            grid-template-columns: 1fr; 
+        }
+
         .field {
             display: flex;
             flex-direction: column;
+            gap: 0.3rem;
         }
+
         label {
-            font-weight: 600;
-            color: #555;
-            margin-bottom: 6px;
-            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-main);
+            font-size: 0.8rem;
         }
+
         input, select, textarea {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 13px;
+            width: 100%;
+            padding: 0.5rem 0.6rem;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-main);
+            font-size: 0.9rem;
+            border-radius: 0.6rem;
             font-family: inherit;
-        }
-        textarea { resize: vertical; min-height: 80px; }
-        input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            transition: border-color 0.15s, box-shadow 0.15s;
         }
+
+        textarea { 
+            resize: vertical; 
+            min-height: 80px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent-soft);
+        }
+
+        .alert-box {
+            margin-top: 0.6rem;
+            padding: 0.6rem;
+            border-radius: 0.4rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-left: 3px solid;
+        }
+
+        .alert-ok {
+            background: var(--ok-soft);
+            color: var(--ok);
+            border-left-color: var(--ok);
+        }
+
+        .alert-warn {
+            background: var(--warn-soft);
+            color: var(--warn);
+            border-left-color: var(--warn);
+        }
+
+        .alert-danger {
+            background: var(--danger-soft);
+            color: var(--danger);
+            border-left-color: var(--danger);
+        }
+
         .lesion-section {
-            background: white;
-            border: 2px solid #ecf0f1;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 6px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            border-radius: 0.6rem;
             display: none;
         }
+
         .lesion-section.active {
             display: block;
-            border-color: #e74c3c;
-            background: #fdeaea;
+            border-color: var(--danger);
+            background: var(--danger-soft);
         }
+
         .lesion-toggle {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0.8rem;
             cursor: pointer;
-            margin-bottom: 10px;
+            margin-bottom: 1rem;
         }
+
         .lesion-toggle input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             cursor: pointer;
         }
+
         .lesion-toggle label {
             margin: 0;
-            font-size: 14px;
+            font-size: 0.9rem;
             cursor: pointer;
+            font-weight: 500;
         }
+
         .button-group {
             display: flex;
-            gap: 10px;
-            margin-top: 30px;
+            gap: 0.8rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
         }
+
         button {
-            padding: 12px 24px;
+            padding: 0.65rem 1.3rem;
             border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
+            border-radius: 0.7rem;
+            font-size: 0.9rem;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
         }
+
         .btn-primary {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            background: linear-gradient(135deg, var(--accent), #1d4ed8);
             color: white;
             flex: 1;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.2);
         }
+
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(44, 62, 80, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
         }
+
         .btn-reset {
-            background: #ecf0f1;
-            color: #555;
+            background: var(--chip-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border);
         }
+
         .btn-reset:hover {
-            background: #bdc3c7;
+            border-color: var(--accent);
+            color: var(--accent);
         }
+
         .result {
             display: none;
-            background: #fff;
-            border: 2px solid #2c3e50;
-            border-radius: 8px;
-            padding: 25px;
-            margin-top: 30px;
-            font-size: 14px;
-            line-height: 1.8;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 0.8rem;
+            padding: 1.6rem;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            line-height: 1.6;
         }
+
         .result.active {
             display: block;
             animation: slideIn 0.4s ease;
         }
+
         @keyframes slideIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
         .result-header {
             font-weight: 700;
-            font-size: 16px;
-            color: #2c3e50;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #ecf0f1;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid var(--border);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
+
         .result-section {
-            margin-bottom: 20px;
-            padding: 12px;
-            background: #f5f7fa;
-            border-radius: 5px;
-            border-left: 4px solid #3498db;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--bg);
+            border-radius: 0.6rem;
+            border-left: 4px solid var(--accent);
         }
+
         .result-section-title {
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 8px;
-            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 0.6rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
         }
+
         .result-content {
-            color: #555;
-            font-size: 13px;
+            color: var(--text-main);
+            font-size: 0.8rem;
             line-height: 1.6;
         }
-        .status-yes { color: #27ae60; font-weight: 700; }
-        .status-no { color: #e74c3c; font-weight: 700; }
-        .status-partial { color: #f39c12; font-weight: 700; }
+
+        .status-yes { 
+            color: var(--ok); 
+            font-weight: 700; 
+        }
+
+        .status-no { 
+            color: var(--danger); 
+            font-weight: 700; 
+        }
+
+        .status-partial { 
+            color: var(--warn); 
+            font-weight: 700; 
+        }
+
         .conclusione-box {
-            background: #fef9e7;
-            border-left: 4px solid #f39c12;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 5px;
-            line-height: 1.8;
+            background: var(--warn-soft);
+            border-left: 4px solid var(--warn);
+            padding: 1.2rem;
+            margin-top: 1.5rem;
+            border-radius: 0.6rem;
+            line-height: 1.7;
+            font-size: 0.85rem;
         }
-        .workup-list { margin-left: 20px; margin-top: 10px; }
-        .workup-list li { margin-bottom: 5px; list-style-type: disc; }
-        .footer {
-            background: #2c3e50;
-            color: #ecf0f1;
-            padding: 20px;
-            text-align: center;
-            font-size: 11px;
+
+        .workup-list { 
+            margin-left: 1.5rem; 
+            margin-top: 0.8rem; 
+        }
+
+        .workup-list li { 
+            margin-bottom: 0.4rem; 
+            list-style-type: disc;
             line-height: 1.6;
-            border-top: 1px solid #34495e;
-            margin-top: 40px;
         }
+
+        .footer {
+            background: linear-gradient(135deg, #1f2937, #111827);
+            color: #e5e7eb;
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 0.7rem;
+            line-height: 1.6;
+            border-top: 1px solid var(--border);
+            margin-top: 3rem;
+        }
+
         .footer a {
-            color: #3498db;
+            color: var(--accent);
             text-decoration: none;
         }
+
         .footer a:hover {
             text-decoration: underline;
+        }
+
+        @media (max-width: 700px) {
+            .content {
+                padding: 1rem;
+            }
+            
+            .header {
+                padding: 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 1.3rem;
+            }
+
+            .field-group {
+                grid-template-columns: 1fr;
+            }
+
+            button {
+                font-size: 0.8rem;
+                padding: 0.5rem 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>📋 Esame Macro- e Microscopico della Placenta</h1>
-            <p>Macroscopico • Pilastri • Lesioni patologiche • Conclusioni specifiche</p>
+            <h1>🫀 Esame Istologico della Placenta</h1>
+            <p>Macroscopico • Pilastri • Lesioni • Conclusioni specifiche</p>
         </div>
         
         <div class="content">
             <form id="placentaForm">
                 <!-- MACROSCOPICO -->
                 <div class="section">
-                    <div class="section-title">🔍 MACROSCOPICO</div>
+                    <div class="section-title">🔍 Macroscopico</div>
                     
-                    <div class="field-group">
                     <div class="field-group">
                         <div class="field">
                             <label>EGA - Settimane</label>
@@ -234,30 +394,31 @@
                             <input type="number" id="ega_clinica_giorni" min="0" max="6" value="0" oninput="checkPeso()">
                         </div>
                     </div>
+
+                    <div class="field-group">
                         <div class="field">
                             <label>Peso placenta (g)</label>
                             <input type="number" id="peso_placenta" min="100" max="1000" value="500" oninput="checkPeso()">
-                            <div id="peso_alert" style="margin-top: 8px; padding: 8px; border-radius: 4px; font-size: 12px; font-weight: 600; display: none;"></div>
+                            <div id="peso_alert"></div>
                         </div>
-                    </div>
-
-                    <div class="field-group">
                         <div class="field">
                             <label>Spessore (mm)</label>
                             <input type="number" id="spessore" min="10" max="60" step="1" value="25" oninput="checkSpessore()">
-                            <div id="spessore_alert" style="margin-top: 8px; padding: 8px; border-radius: 4px; font-size: 12px; font-weight: 600; display: none;"></div>
-                        </div>
-                        </div>
-                        <div class="field">
-                            <label>Lunghezza cordone (cm)</label>
-                            <input type="number" id="lunghezza_cordone" min="10" max="100" value="50" oninput="checkCordone()">
-                            <div id="cordone_alert" style="margin-top: 8px; padding: 8px; border-radius: 4px; font-size: 12px; font-weight: 600; display: none;"></div>
+                            <div id="spessore_alert"></div>
                         </div>
                     </div>
 
                     <div class="field-group">
                         <div class="field">
-                            <label>Aspetto superficie fetale della placenta</label>
+                            <label>Lunghezza cordone (cm)</label>
+                            <input type="number" id="lunghezza_cordone" min="10" max="100" value="50" oninput="checkCordone()">
+                            <div id="cordone_alert"></div>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <div class="field">
+                            <label>Aspetto superficie fetale</label>
                             <select id="aspetto_fetale" required>
                                 <option value="">Seleziona...</option>
                                 <option value="Normale (lucido)">Normale (lucido)</option>
@@ -294,7 +455,7 @@
 
                 <!-- PILASTRI FONDAMENTALI -->
                 <div class="section">
-                    <div class="section-title">🔍 ESAME MICROSCOPICO - PILASTRI FONDAMENTALI</div>
+                    <div class="section-title">🔬 Pilastri Fondamentali</div>
                     
                     <div class="field-group">
                         <div class="field">
@@ -322,9 +483,9 @@
                     </div>
                 </div>
 
-                <!-- LESIONE 1: INFARTI -->
+                <!-- INFARTI -->
                 <div class="section">
-                    <div class="section-title">🔴 LESIONE 1: INFARTI PLACENTARI</div>
+                    <div class="section-title">🔴 Lesione 1: Infarti Placentari</div>
                     <div class="lesion-toggle">
                         <input type="checkbox" id="infarti_presenti" onchange="toggleInfarti()">
                         <label for="infarti_presenti"><strong>Infarti placentari presenti</strong></label>
@@ -338,7 +499,7 @@
                                     <option value="">Seleziona...</option>
                                     <option value="Focale">Focale (1-2 aree limitate)</option>
                                     <option value="Multifocale">Multifocale (3+ aree)</option>
-                                    <option value="Estesa">Estesa (coinvolge &gt;25% parenchima)</option>
+                                    <option value="Estesa">Estesa (>25% parenchima)</option>
                                 </select>
                             </div>
                             <div class="field">
@@ -353,7 +514,7 @@
                         </div>
                         <div class="field-group full">
                             <div class="field">
-                                <label>% parenchima (stima)</label>
+                                <label>% parenchima coinvolto (stima)</label>
                                 <input type="number" id="infarti_percentuale" min="0" max="100" step="5" value="10">
                             </div>
                         </div>
@@ -366,9 +527,9 @@
                     </div>
                 </div>
 
-                <!-- LESIONE 2: VILLITE -->
+                <!-- VILLITE -->
                 <div class="section">
-                    <div class="section-title">🟡 LESIONE 2: VILLITE</div>
+                    <div class="section-title">🟡 Lesione 2: Villite</div>
                     <div class="lesion-toggle">
                         <input type="checkbox" id="villite_presenti" onchange="toggleVillite()">
                         <label for="villite_presenti"><strong>Villite presente</strong></label>
@@ -389,9 +550,9 @@
                                 <label>Distribuzione</label>
                                 <select id="villite_distribuzione" required>
                                     <option value="">Seleziona...</option>
-                                    <option value="Focale">Focale (aree limitate)</option>
+                                    <option value="Focale">Focale</option>
                                     <option value="Multifocale">Multifocale</option>
-                                    <option value="Diffusa">Diffusa (tutte le zone)</option>
+                                    <option value="Diffusa">Diffusa</option>
                                 </select>
                             </div>
                         </div>
@@ -416,9 +577,9 @@
                     </div>
                 </div>
 
-                <!-- LESIONE 3: CALCIFICAZIONI -->
+                <!-- CALCIFICAZIONI -->
                 <div class="section">
-                    <div class="section-title">🟢 LESIONE 3: CALCIFICAZIONI</div>
+                    <div class="section-title">🟢 Lesione 3: Calcificazioni</div>
                     <div class="lesion-toggle">
                         <input type="checkbox" id="calcif_presenti" onchange="toggleCalcif()">
                         <label for="calcif_presenti"><strong>Calcificazioni presenti</strong></label>
@@ -430,9 +591,9 @@
                                 <label>Distribuzione</label>
                                 <select id="calcif_distribuzione" required>
                                     <option value="">Seleziona...</option>
-                                    <option value="Periferica">Periferica (margini placentari)</option>
+                                    <option value="Periferica">Periferica (margini)</option>
                                     <option value="Centrale">Centrale</option>
-                                    <option value="Diffusa">Diffusa (tutte le zone)</option>
+                                    <option value="Diffusa">Diffusa</option>
                                 </select>
                             </div>
                             <div class="field">
@@ -450,8 +611,8 @@
                                 <label>Aspetto microscopico</label>
                                 <select id="calcif_aspetto">
                                     <option value="Non specificato">Non specificato</option>
-                                    <option value="Sparse, fini">Sparse, fini (early)</option>
-                                    <option value="Depositi solidi">Depositi solidi (mature)</option>
+                                    <option value="Sparse, fini">Sparse, fini</option>
+                                    <option value="Depositi solidi">Depositi solidi</option>
                                     <option value="Massivi">Massivi e confluenti</option>
                                 </select>
                             </div>
@@ -459,7 +620,7 @@
                         <div class="field-group full">
                             <div class="field">
                                 <label>Interpretazione clinica</label>
-                                <textarea id="calcif_note" placeholder="Es. Calcificazioni diffuse a termine = marker di stress placentare cronico..."></textarea>
+                                <textarea id="calcif_note" placeholder="Es. Calcificazioni diffuse a termine = marker di stress placentare..."></textarea>
                             </div>
                         </div>
                     </div>
@@ -467,7 +628,7 @@
 
                 <!-- NOTE AGGIUNTIVE -->
                 <div class="section">
-                    <div class="section-title">📝 NOTE AGGIUNTIVE</div>
+                    <div class="section-title">📝 Note Aggiuntive</div>
                     <div class="field-group full">
                         <div class="field">
                             <label>Altre osservazioni</label>
@@ -478,57 +639,57 @@
 
                 <!-- BOTTONI -->
                 <div class="button-group">
-                    <button type="button" class="btn-primary" onclick="genera_referto()">📄 GENERA REFERTO</button>
-                    <button type="reset" class="btn-reset">RESET</button>
+                    <button type="button" class="btn-primary" onclick="genera_referto()">📄 Genera Referto</button>
+                    <button type="reset" class="btn-reset">🔄 Reset</button>
                 </div>
             </form>
 
             <!-- RISULTATO -->
             <div id="result" class="result">
-                <div class="result-header">REFERTO ISTOLOGICO - PLACENTA</div>
+                <div class="result-header">Referto Istologico - Placenta</div>
 
                 <div class="result-section">
-                    <div class="result-section-title">MACROSCOPICO</div>
+                    <div class="result-section-title">Macroscopico</div>
                     <div class="result-content" id="macro_output"></div>
                 </div>
 
                 <div class="result-section">
-                    <div class="result-section-title">PILASTRI FONDAMENTALI</div>
+                    <div class="result-section-title">Pilastri Fondamentali</div>
                     <div class="result-content" id="pilastri_output"></div>
                 </div>
 
                 <div class="result-section">
-                    <div class="result-section-title">🔴 INFARTI PLACENTARI</div>
+                    <div class="result-section-title">🔴 Infarti Placentari</div>
                     <div class="result-content" id="infarti_output"></div>
                 </div>
 
                 <div class="result-section">
-                    <div class="result-section-title">🟡 VILLITE</div>
+                    <div class="result-section-title">🟡 Villite</div>
                     <div class="result-content" id="villite_output"></div>
                 </div>
 
                 <div class="result-section">
-                    <div class="result-section-title">🟢 CALCIFICAZIONI</div>
+                    <div class="result-section-title">🟢 Calcificazioni</div>
                     <div class="result-content" id="calcif_output"></div>
                 </div>
 
                 <div class="result-section" id="note_aggiuntive_result" style="display: none;">
-                    <div class="result-section-title">ALTRE OSSERVAZIONI</div>
+                    <div class="result-section-title">Altre Osservazioni</div>
                     <div class="result-content" id="note_aggiuntive_output"></div>
                 </div>
 
                 <div class="conclusione-box">
-                    <div style="font-weight: 700; color: #2c3e50; margin-bottom: 10px;">CONCLUSIONE E INDICAZIONI CLINICHE:</div>
-                    <div id="conclusione" style="color: #555; line-height: 1.8;"></div>
+                    <div style="font-weight: 700; margin-bottom: 0.8rem;">Conclusione e Indicazioni Cliniche:</div>
+                    <div id="conclusione"></div>
                 </div>
             </div>
         </div>
 
         <div class="footer">
-            <strong>RIFERIMENTI BIBLIOGRAFICI</strong><br>
-            1. <a href="https://www.pregnancyhypertension.org/" target="_blank">ISSHP</a> - International Society for the Study of Hypertension in Pregnancy. Criteria for insufficienza placentare e preeclampsia.<br>
-            2. <a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank">Benirschke & Kaufmann's Pathology of the Human Placenta</a> - Gold standard per istologia placentare e classificazione lesioni.<br>
-            3. <a href="https://www.sipatologia.it/" target="_blank">SIPat</a> - Società Italiana di Anatomia Patologica. Linee guida italiane per refertazione placentare.
+            <strong>Riferimenti Bibliografici</strong><br>
+            Benirschke K, Kaufmann P, Baergen RN. <em>Pathology of the Human Placenta</em>. 6th ed. Springer; 2012.<br>
+            ISSHP (International Society for the Study of Hypertension in Pregnancy). Guidelines on insufficienza placentare e preeclampsia.<br>
+            SIPat (Società Italiana di Anatomia Patologica). Linee guida per refertazione istologica placentare.
         </div>
     </div>
 
@@ -538,23 +699,14 @@
             const alert_div = document.getElementById('spessore_alert');
             
             if (spessore < 10) {
-                alert_div.style.display = 'block';
-                alert_div.style.background = '#f8d7da';
-                alert_div.style.color = '#721c24';
-                alert_div.style.borderLeft = '3px solid #721c24';
-                alert_div.innerHTML = '🔴 ATROFIA - Possibile insufficienza placentare';
+                alert_div.className = 'alert-box alert-danger';
+                alert_div.innerHTML = '🔴 Atrofia - Possibile insufficienza placentare';
             } else if (spessore > 30) {
-                alert_div.style.display = 'block';
-                alert_div.style.background = '#fff3cd';
-                alert_div.style.color = '#856404';
-                alert_div.style.borderLeft = '3px solid #856404';
-                alert_div.innerHTML = '⚠️ EDEMA - Possibile sofferenza placentare';
+                alert_div.className = 'alert-box alert-warn';
+                alert_div.innerHTML = '⚠️ Edema - Possibile sofferenza placentare';
             } else {
-                alert_div.style.display = 'block';
-                alert_div.style.background = '#d4edda';
-                alert_div.style.color = '#155724';
-                alert_div.style.borderLeft = '3px solid #155724';
-                alert_div.innerHTML = '✓ NORMALE (10-30 mm)';
+                alert_div.className = 'alert-box alert-ok';
+                alert_div.innerHTML = '✓ Normale (10-30 mm)';
             }
         }
 
@@ -566,23 +718,14 @@
             const alert_div = document.getElementById('peso_alert');
             
             if (percentuale < 80) {
-                alert_div.style.display = 'block';
-                alert_div.style.background = '#f8d7da';
-                alert_div.style.color = '#721c24';
-                alert_div.style.borderLeft = '3px solid #721c24';
-                alert_div.innerHTML = `🔴 RIDOTTO - ${percentuale}% del peso atteso (${pesoAtteso}g)`;
+                alert_div.className = 'alert-box alert-danger';
+                alert_div.innerHTML = `🔴 Ridotto - ${percentuale}% peso atteso (${pesoAtteso}g)`;
             } else if (percentuale > 120) {
-                alert_div.style.display = 'block';
-                alert_div.style.background = '#fff3cd';
-                alert_div.style.color = '#856404';
-                alert_div.style.borderLeft = '3px solid #856404';
-                alert_div.innerHTML = `⚠️ AUMENTATO - ${percentuale}% del peso atteso (${pesoAtteso}g)`;
+                alert_div.className = 'alert-box alert-warn';
+                alert_div.innerHTML = `⚠️ Aumentato - ${percentuale}% peso atteso (${pesoAtteso}g)`;
             } else {
-                alert_div.style.display = 'block';
-                alert_div.style.background = '#d4edda';
-                alert_div.style.color = '#155724';
-                alert_div.style.borderLeft = '3px solid #155724';
-                alert_div.innerHTML = `✓ NORMALE - ${percentuale}% del peso atteso (${pesoAtteso}g)`;
+                alert_div.className = 'alert-box alert-ok';
+                alert_div.innerHTML = `✓ Normale - ${percentuale}% peso atteso (${pesoAtteso}g)`;
             }
         }
 
@@ -591,39 +734,27 @@
             const alert_div = document.getElementById('cordone_alert');
             
             if (cordone < 30) {
-                alert_div.style.display = 'block';
-                alert_div.style.background = '#f8d7da';
-                alert_div.style.color = '#721c24';
-                alert_div.style.borderLeft = '3px solid #721c24';
-                alert_div.innerHTML = '🔴 CORTO - Rischio compressione/avvolgimento';
+                alert_div.className = 'alert-box alert-danger';
+                alert_div.innerHTML = '🔴 Corto - Rischio compressione/avvolgimento';
             } else if (cordone > 80) {
-                alert_div.style.display = 'block';
-                alert_div.style.background = '#fff3cd';
-                alert_div.style.color = '#856404';
-                alert_div.style.borderLeft = '3px solid #856404';
-                alert_div.innerHTML = '⚠️ LUNGO - Rischio annodamento/volvolo';
+                alert_div.className = 'alert-box alert-warn';
+                alert_div.innerHTML = '⚠️ Lungo - Rischio annodamento/volvolo';
             } else {
-                alert_div.style.display = 'block';
-                alert_div.style.background = '#d4edda';
-                alert_div.style.color = '#155724';
-                alert_div.style.borderLeft = '3px solid #155724';
-                alert_div.innerHTML = '✓ NORMALE (30-80 cm)';
+                alert_div.className = 'alert-box alert-ok';
+                alert_div.innerHTML = '✓ Normale (30-80 cm)';
             }
         }
 
         function toggleInfarti() {
-            const ch = document.getElementById('infarti_presenti').checked;
-            document.getElementById('infarti_dettagli').classList.toggle('active', ch);
+            document.getElementById('infarti_dettagli').classList.toggle('active');
         }
 
         function toggleVillite() {
-            const ch = document.getElementById('villite_presenti').checked;
-            document.getElementById('villite_dettagli').classList.toggle('active', ch);
+            document.getElementById('villite_dettagli').classList.toggle('active');
         }
 
         function toggleCalcif() {
-            const ch = document.getElementById('calcif_presenti').checked;
-            document.getElementById('calcif_dettagli').classList.toggle('active', ch);
+            document.getElementById('calcif_dettagli').classList.toggle('active');
         }
 
         function genera_referto() {
@@ -653,21 +784,21 @@
                 // PILASTRI
                 let pilastri_html = '';
                 if (ega_istologia === 'compatibile') {
-                    pilastri_html += `<strong>✓ ETA' GESTAZIONALE:</strong> <span class="status-yes">Compatibile</span> con EGA clinica ${ega_clinica} settimane.<br>`;
+                    pilastri_html += `<strong>✓ ETA' GESTAZIONALE:</strong> <span class="status-yes">Compatibile</span> (${ega_clinica} sett.)<br>`;
                 } else if (ega_istologia === 'precoce') {
-                    pilastri_html += `<strong>⚠ ETA' GESTAZIONALE:</strong> <span class="status-partial">Più precoce</span> di quella indicata.<br>`;
+                    pilastri_html += `<strong>⚠ ETA' GESTAZIONALE:</strong> <span class="status-partial">Più precoce</span> di quella indicata<br>`;
                 } else if (ega_istologia === 'tardiva') {
-                    pilastri_html += `<strong>⚠ ETA' GESTAZIONALE:</strong> <span class="status-partial">Più tardiva</span> di quella indicata.<br>`;
+                    pilastri_html += `<strong>⚠ ETA' GESTAZIONALE:</strong> <span class="status-partial">Più tardiva</span> di quella indicata<br>`;
                 }
 
                 if (villi_stato === 'maturi') {
-                    pilastri_html += `<strong>✓ VILLI CORIALI:</strong> <span class="status-yes">Maturi</span> - sincizio sottile, fenestrazioni, nuclei marginali.`;
+                    pilastri_html += `<strong>✓ VILLI CORIALI:</strong> <span class="status-yes">Maturi</span> - sincizio sottile, fenestrazioni presenti`;
                 } else if (villi_stato === 'intermedi') {
-                    pilastri_html += `<strong>⚠ VILLI CORIALI:</strong> <span class="status-partial">Intermedi</span> - maturazione parziale.`;
+                    pilastri_html += `<strong>⚠ VILLI CORIALI:</strong> <span class="status-partial">Intermedi</span> - maturazione parziale`;
                 } else if (villi_stato === 'immaturi') {
-                    pilastri_html += `<strong>✗ VILLI CORIALI:</strong> <span class="status-no">Immaturi</span> - A ${ega_clinica} settimane = ANOMALO.`;
+                    pilastri_html += `<strong>✗ VILLI CORIALI:</strong> <span class="status-no">Immaturi</span> - ANOMALO per EGA ${ega_clinica} sett.`;
                 } else if (villi_stato === 'degenerativi') {
-                    pilastri_html += `<strong>✗ VILLI CORIALI:</strong> <span class="status-no">Degenerativi</span> - Edema, sinciziale necrotico.`;
+                    pilastri_html += `<strong>✗ VILLI CORIALI:</strong> <span class="status-no">Degenerativi</span> - Edema, danno sinciziale`;
                 }
 
                 document.getElementById('pilastri_output').innerHTML = pilastri_html;
@@ -679,9 +810,9 @@
                     const localizzazione = document.getElementById('infarti_localizzazione').value;
                     const percentuale = document.getElementById('infarti_percentuale').value;
                     const note = document.getElementById('infarti_note').value;
-                    document.getElementById('infarti_output').innerHTML = `<span class="status-no">PRESENTI</span><br><strong>Estensione:</strong> ${estensione}<br><strong>Localizzazione:</strong> ${localizzazione}<br><strong>% parenchima:</strong> ~${percentuale}%<br>${note ? '<strong>Note:</strong> ' + note : ''}`;
+                    document.getElementById('infarti_output').innerHTML = `<span class="status-no">PRESENTI</span><br><strong>Estensione:</strong> ${estensione} • <strong>Localizzazione:</strong> ${localizzazione} • <strong>% parenchima:</strong> ~${percentuale}%${note ? '<br><strong>Note:</strong> ' + note : ''}`;
                 } else {
-                    document.getElementById('infarti_output').innerHTML = `<span class="status-yes">ASSENTI</span>`;
+                    document.getElementById('infarti_output').innerHTML = `<span class="status-yes">Assenti</span>`;
                 }
 
                 // VILLITE
@@ -691,9 +822,9 @@
                     const distribuzione = document.getElementById('villite_distribuzione').value;
                     const tipo = document.getElementById('villite_tipo').value;
                     const note = document.getElementById('villite_note').value;
-                    document.getElementById('villite_output').innerHTML = `<span class="status-no">PRESENTE</span><br><strong>Grado:</strong> ${grado}<br><strong>Distribuzione:</strong> ${distribuzione}<br><strong>Infiltrato:</strong> ${tipo}<br>${note ? '<strong>Interpretazione:</strong> ' + note : ''}`;
+                    document.getElementById('villite_output').innerHTML = `<span class="status-no">PRESENTE</span><br><strong>Grado:</strong> ${grado} • <strong>Distribuzione:</strong> ${distribuzione} • <strong>Infiltrato:</strong> ${tipo}${note ? '<br><strong>Interpretazione:</strong> ' + note : ''}`;
                 } else {
-                    document.getElementById('villite_output').innerHTML = `<span class="status-yes">ASSENTE</span>`;
+                    document.getElementById('villite_output').innerHTML = `<span class="status-yes">Assente</span>`;
                 }
 
                 // CALCIFICAZIONI
@@ -707,9 +838,9 @@
                     calcif_patologica = (stadio !== 'Scarsa');
                     const status = stadio === 'Scarsa' ? 'status-yes' : 'status-partial';
                     const label = stadio === 'Scarsa' ? 'SCARSE (fisiologiche)' : 'PRESENTI';
-                    document.getElementById('calcif_output').innerHTML = `<span class="${status}">${label}</span><br><strong>Distribuzione:</strong> ${distribuzione}<br><strong>Stadio:</strong> ${stadio}<br><strong>Aspetto:</strong> ${aspetto}<br>${note ? '<strong>Interpretazione:</strong> ' + note : ''}`;
+                    document.getElementById('calcif_output').innerHTML = `<span class="${status}">${label}</span><br><strong>Distribuzione:</strong> ${distribuzione} • <strong>Stadio:</strong> ${stadio} • <strong>Aspetto:</strong> ${aspetto}${note ? '<br><strong>Interpretazione:</strong> ' + note : ''}`;
                 } else {
-                    document.getElementById('calcif_output').innerHTML = `<span class="status-yes">ASSENTI</span>`;
+                    document.getElementById('calcif_output').innerHTML = `<span class="status-yes">Assenti</span>`;
                 }
 
                 // NOTE AGGIUNTIVE
@@ -721,75 +852,32 @@
                     document.getElementById('note_aggiuntive_result').style.display = 'none';
                 }
 
-                // CONCLUSIONE
+                // CONCLUSIONE SEMPLIFICATA
                 let conclusione = '';
                 const no_lesioni = !infarti_presente && !villite_presente && !calcif_presente;
                 const solo_calcif_scarsa = !infarti_presente && !villite_presente && calcif_presente && !calcif_patologica;
 
                 if (no_lesioni && villi_stato === 'maturi' && ega_istologia === 'compatibile') {
-                    conclusione = `<strong>ESAME ISTOLOGICO SENZA ALTERAZIONI SIGNIFICATIVE</strong><br><br>
-                        La placenta presenta struttura e maturazione istologica pienamente compatibile con l'EGA clinica indicata di ${ega_clinica} settimane. Villi coriali maturi con sinciziotrofoblasto sottile, fenestrazioni presenti e nuclei marginali ben rappresentati. Assenza di infarti, villiti o calcificazioni patologiche. Quadro istologico totalmente idoneo per gravidanza normotesa senza complicanze.<br><br>
-                        <strong>Significato clinico:</strong> Questo pattern è indicativo di adeguata funzione placentare e perfusione materno-fetale conservata. Non sussistono elementi patologici suggestivi di insufficienza placentare, infezione congenita o fattori trombotici.<br><br>
-                        <strong>Raccomandazioni:</strong> Follow-up ostetrico e pediatrico standard secondo protocolli di routine. Nessun workup serologico o genetico aggiuntivo necessario.`;
+                    conclusione = `Esame istologico senza alterazioni significative. Struttura e maturazione placentare pienamente compatibile con EGA clinica di ${ega_clinica} settimane. Villi maturi, assenza di lesioni patologiche, adeguata funzione placentare. Follow-up ostetrico standard.`;
                 } else if (solo_calcif_scarsa && villi_stato === 'maturi') {
-                    conclusione = `<strong>ESAME CON LIEVI ALTERAZIONI FISIOLOGICHE</strong><br><br>
-                        Calcificazioni scarse e sporadiche, completamente compatibili con l'invecchiamento fisiologico della placenta a termine. Questo è un reperto atteso nelle ultime settimane di gravidanza come conseguenza del normale metabolismo calcico e dell'apoptosi trofoblastica programmata. La struttura placentare è altrimenti normale con villi maturi e assenza di lesioni significative.<br><br>
-                        <strong>Significato clinico:</strong> Le calcificazioni scarse a termine non hanno significato patologico e non indicano sofferenza placentare. Rappresentano un marker naturale di maturazione placentare.<br><br>
-                        <strong>Raccomandazioni:</strong> Follow-up clinico standard. Nessun approfondimento aggiuntivo necessario.`;
+                    conclusione = `Calcificazioni scarse, completamente fisiologiche a termine. Marker di maturazione placentare normale. Nessun significato patologico. Follow-up clinico standard.`;
                 } else if (infarti_presente && !villite_presente && !calcif_patologica) {
-                    conclusione = `<strong>INSUFFICIENZA PLACENTARE CRONICA CON INFARTI PLACENTARI</strong><br><br>
-                        Riscontrati infarti placentari multifocali/estesi, indicativi di insufficienza placentare cronica. Gli infarti rappresentano aree di necrosi villare da ischemia, spesso conseguenti a patologie vascolari materne (preeclampsia, ipertensione gestazionale) o a disordini trombotici. Questo pattern è fortemente associato a restrizione di crescita intrauterina (IUGR), ipertensione gestazionale, preeclampsia e potenziali complicanze neonatali (basso peso, ipossia perinatale).<br><br>
-                        <strong>Significato clinico:</strong> La presenza di infarti suggerisce compromissione della funzione placentare con ridotta area di scambio materno-fetale. Correlazione urgente con clinica (pressione materna, oligoidramnios, velocimetria doppler, peso fetale stimato).<br><br>
-                        <strong>Workup consigliato:</strong>
-                        <ul class="workup-list">
-                            <li><strong>Trombofilgia materna:</strong> Fattore V Leiden (G1691A), Protrombina (G20210A), Proteina C, Proteina S, Antitrombina, omocisteina</li>
-                            <li><strong>Anticorpi antifosfolipidi:</strong> APA (anticardiolipina, β2-glicoproteina), lupus anticoagulant</li>
-                            <li><strong>Emocromo e coagulazione:</strong> Piastrine, LDH, D-dimero per escludere HELLP/DIC</li>
-                            <li><strong>Counseling ostetrico:</strong> Alto rischio di ricorrenza in gravidanze future; valutare screening trombofilgia, terapia tromboprofilattica (EBPM/acido acetilsalicilico)</li>
-                        </ul>`;
+                    conclusione = `<strong>Insufficienza placentare cronica con infarti placentari.</strong> Workup consigliato: screening trombofilgia materna (fattore V Leiden, G20210A, proteina C/S), anticorpi antifosfolipidi, counseling ostetrico per gestioni future. Correlazione urgente con clinica ostetrica (pressione, oligoidramnios, ecografia).`;
                 } else if (!infarti_presente && villite_presente && !calcif_patologica) {
-                    conclusione = `<strong>VILLITE - FORTEMENTE SOSPETTA INFEZIONE CONGENITA</strong><br><br>
-                        Riscontrata infiammazione significativa dei villi coriali con infiltrato cellulare ${document.getElementById('villite_grado').value.toLowerCase()}, pattern istologico classicamente associato a infezioni intrauterine congenite. Le possibili eziologie includono: <strong>CMV (più frequente)</strong>, toxoplasma, sifilide, listeria, virus varicella-zoster, epatite E, parvovirus B19. La villite riflette una risposta immunitaria fetale/placentare all'agente patogeno, con rischio significativo di trasmissione verticale e sequele neonatali (danno neurologico, ipossia, prematurità, basso peso).<br><br>
-                        <strong>Significato clinico:</strong> URGENTE - Questo reperto richiede approfondimento serologico e molecolare immediato per identificare l'eziologia e stratificare il rischio neonatale. Le infezioni congenite hanno tassi di sequela del 10-25% (sordità, ritardo psicomotorio, retinopatia, epatosplenomegalia).<br><br>
-                        <strong>Workup URGENTE consigliato:</strong>
-                        <ul class="workup-list">
-                            <li><strong>Serologica materna STAT:</strong> CMV IgG/IgM, Toxo IgG/IgM, RPR/TPPA (sifilide), listeria sierologia, varicella IgG/IgM, parvovirus IgG/IgM</li>
-                            <li><strong>PCR liquor neonatale (ASAP):</strong> CMV, toxo, listeria, HSV-1/HSV-2, VZV se disponibili</li>
-                            <li><strong>Istologia placentare aggiuntiva:</strong> Ricerca inclusioni citomegaliche, coloranti speciali (PAS, Giemsa) per identificare microrganismi</li>
-                            <li><strong>Follow-up pediatrico urgente:</strong> Valutazione audiologica (per CMV/toxoplasma), oftalmologia (retinopatia), neurologia (anomalie sviluppo), imaging cerebrale se indicato</li>
-                            <li><strong>Counseling genitoriale:</strong> Spiegare diagnosi presunta, possibili esiti, necessità di follow-up neonatale prolungato, trattamenti disponibili (ganciclovir per CMV neonatale, ecc.)</li>
-                        </ul>`;
+                    conclusione = `<strong>URGENTE - Villite fortemente sospetta per infezione congenita.</strong> Workup STAT: serologica materna (CMV, toxo, sifilide, listeria, varicella, parvovirus), PCR liquor neonatale, ricerca patogeni. Follow-up pediatrico multidisciplinare urgente (neurologia, audiologia, oftalmologia). Alto rischio di sequele neonatali.`;
                 } else if (!infarti_presente && !villite_presente && calcif_patologica) {
-                    conclusione = `<strong>CALCIFICAZIONI PATOLOGICHE - MARKER DI STRESS PLACENTARE CRONICO</strong><br><br>
-                        Riscontrate calcificazioni diffuse e patologicamente significative nei villi coriali, espressione di stress ossidativo cronico e invecchiamento placentare accelerato. Questo reperto è frequentemente associato a condizioni di insufficienza placentare cronica, preeclampsia tardiva, ipertensione gestazionale e restrizione di crescita. Le calcificazioni rappresentano depositi di cristalli di calcio fosforico derivanti da danno trofoblastico cronico e apoptosi accelerata.<br><br>
-                        <strong>Significato clinico:</strong> Marker di compromissione funzionale placentare, sebbene meno specifico degli infarti. Spesso correla con outcome perinatale sfavorevole (basso peso, ipossia, prematurità). Richiede correlazione con clinica ostetrica (pressione, proteinuria, ecografia ostetricia con Doppler).<br><br>
-                        <strong>Workup consigliato:</strong>
-                        <ul class="workup-list">
-                            <li><strong>Correlazione clinica ostetrica:</strong> Valutare presenza di preeclampsia, ipertensione gestazionale, ritardo di crescita stimato all'ecografia</li>
-                            <li><strong>Screening trombofilgia materna:</strong> Se storia di preeclampsia ricorrente, perdite ripetute o trombosi (fattore V Leiden, G20210A, proteina C/S)</li>
-                            <li><strong>Anticorpi antifosfolipidi:</strong> Se preeclampsia precoce (&lt;34 sett) o storia di perdita ricorrente</li>
-                            <li><strong>Follow-up neonatale:</strong> Valutare outcome (peso, Apgar, complicanze respiratorie, neurologia)</li>
-                            <li><strong>Counseling:</strong> Rischio moderato di ricorrenza in gravidanze future; valutare controllo BP, proteinuria, ecografia e Doppler ravvicinati</li>
-                        </ul>`;
+                    conclusione = `Calcificazioni patologiche suggestive di stress placentare cronico. Workup: escludere preeclampsia, ipertensione, IUGR. Screening trombofilgia se preeclampsia ricorrente. Counseling su rischio ricorrenza in gravidanze future.`;
                 } else {
-                    conclusione = `<strong>ALTERAZIONI PATOLOGICHE MULTIPLE SIGNIFICATIVE - DANNO PLACENTARE SEVERO</strong><br><br>
-                        Riscontrate alterazioni placentari importanti e multifenomenali: associazione di infarti, villite e/o calcificazioni patologiche. Questo pattern complesso suggerisce danno placentare da meccanismi multipli e sovrapposti: (1) insufficienza vascolare cronica con ischemica (infarti), (2) componente infiammatoria/infettiva (villite), (3) stress ossidativo accelerato (calcificazioni). Questo quadro è indicativo di compromissione severa della funzione placentare con alto rischio di outcome perinatale sfavorevole.<br><br>
-                        <strong>Significato clinico:</strong> URGENTE - Danno placentare multifattoriale con potenziale coinvolgimento di fattori sia materni (trombofilia, autoimmunità) che infettivi. Altissimo rischio di IUGR, ipossia perinatale, morte fetale e sequele neonatali (encefalopatia, sordità, disabilità neurologiche).<br><br>
-                        <strong>Workup URGENTE e completo consigliato:</strong>
-                        <ul class="workup-list">
-                            <li><strong>Serologica materna STAT:</strong> CMV, toxo, sifilide, listeria, varicella (per escludere/confermare infezione congenita)</li>
-                            <li><strong>Trombofilgia materna:</strong> Fattore V, G20210A, proteina C/S, antitrombina, omocisteina</li>
-                            <li><strong>Anticorpi antifosfolipidi:</strong> APA, lupus anticoagulant (se preeclampsia precoce o perdite ricorrenti)</li>
-                            <li><strong>PCR liquor e colture neonatali:</strong> Ricerca agenti infettivi, emocolture per batteriemia congenita</li>
-                            <li><strong>Follow-up pediatrico URGENTE e multidisciplinare:</strong> Valutazione neurologica, audiologica, oftalmologica. Imaging cerebrale. Ricerca sequele infettive.</li>
-                            <li><strong>Counseling genitoriale urgente:</strong> Discussione approfondita su rischi, outcome attesi, possibili complicanze, opzioni terapeutiche neonatali</li>
-                            <li><strong>Valutazione post-partum:</strong> Follow-up neonatale prolungato (almeno 24 mesi per CMV/toxo), possibile trattamento (ganciclovir, spiramicina, ecc.)</li>
-                        </ul>`;
+                    conclusione = `<strong>Alterazioni patologiche multiple significative.</strong> Danno placentare severo da meccanismi multipli. URGENTE: workup completo per infezione congenita, trombofilgia materna, anticorpi antifosfolipidi. Follow-up pediatrico multidisciplinare urgente. Alto rischio outcome perinatale sfavorevole.`;
                 }
 
                 document.getElementById('conclusione').innerHTML = conclusione;
                 document.getElementById('result').classList.add('active');
                 document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                checkSpessore();
+                checkPeso();
+                checkCordone();
             } catch (error) {
                 alert('Errore: ' + error.message);
                 console.error(error);
