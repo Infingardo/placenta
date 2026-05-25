@@ -716,16 +716,23 @@ function copiaRef(){
 function nuovoCaso(){
     if(!confirm('Azzerare tutti i campi e nascondere il referto?')) return;
     document.getElementById('pForm').reset();
+    // svuota i campi numerici con default precostituiti
+    ['ega_s','ega_g','peso','spess','lc','c_disco',
+     'inf_pct','fvm_pct','mpfd_pct'].forEach(id=>{
+        const el=document.getElementById(id);
+        if(el) el.value='';
+    });
+    // nascondi tutti gli alert (campi vuoti — niente da calcolare)
+    ['pa','sa','ca','va'].forEach(id=>{
+        const el=document.getElementById(id);
+        if(el){el.className='';el.innerHTML='';}
+    });
     // chiudi tutti i pannelli lesione
     document.querySelectorAll('.ld').forEach(el=>el.classList.remove('active'));
     // deseleziona tutti i checkbox
     document.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.checked=false);
     // nascondi risultato
     document.getElementById('result').classList.remove('active');
-    // ricalcola alert
-    checkPeso(); checkSpess(); checkCord();
-    // svuota alerts vasi
-    document.getElementById('va').className=''; document.getElementById('va').innerHTML='';
     window.scrollTo({top:0,behavior:'smooth'});
 }
 window.onload=()=>{checkPeso();checkSpess();checkCord();};
