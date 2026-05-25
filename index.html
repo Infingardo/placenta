@@ -3,1019 +3,732 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esame Istologico della Placenta</title>
+    <title>Esame Istologico della Placenta v4</title>
     <style>
         :root {
-            --bg: #f8f9fa;
-            --bg-card: #ffffff;
-            --border: #e8eaed;
-            --border-subtle: #efefef;
-            --accent: #2563eb;
-            --accent-soft: rgba(37,99,235,0.08);
-            --danger: #dc2626;
-            --danger-soft: rgba(220,38,38,0.08);
-            --warn: #d97706;
-            --warn-soft: rgba(217,119,6,0.08);
-            --ok: #16a34a;
-            --ok-soft: rgba(22,163,74,0.08);
-            --text-main: #1f2937;
-            --text-muted: #6b7280;
-            --chip-bg: #f3f4f6;
+            --bg:#f8f9fa; --bg-card:#fff; --border:#e8eaed;
+            --accent:#2563eb; --accent-soft:rgba(37,99,235,.08);
+            --danger:#dc2626; --danger-soft:rgba(220,38,38,.08);
+            --warn:#d97706; --warn-soft:rgba(217,119,6,.08);
+            --ok:#16a34a; --ok-soft:rgba(22,163,74,.08);
+            --text:#1f2937; --muted:#6b7280; --chip:#f3f4f6;
         }
-
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-        }
-        
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
-            background: var(--bg);
-            color: var(--text-main);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: var(--bg-card);
-            border-radius: 1rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, var(--accent), #1d4ed8);
-            color: white;
-            padding: 2.5rem;
-            text-align: center;
-        }
-
-        .header h1 { 
-            font-size: 1.75rem; 
-            margin-bottom: 0.5rem;
-            letter-spacing: 0.02em;
-        }
-
-        .header p { 
-            font-size: 0.9rem; 
-            opacity: 0.9;
-        }
-
-        .content {
-            padding: 2rem;
-        }
-
-        .section {
-            margin-bottom: 1.5rem;
-            padding: 1.5rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 0.8rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        .section-title {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-
-        .field-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 0.9rem 1.2rem;
-            margin-bottom: 0.6rem;
-        }
-
-        .field-group.full { 
-            grid-template-columns: 1fr; 
-        }
-
-        .field {
-            display: flex;
-            flex-direction: column;
-            gap: 0.3rem;
-        }
-
-        label {
-            font-weight: 500;
-            color: var(--text-main);
-            font-size: 0.8rem;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 0.5rem 0.6rem;
-            border: 1px solid var(--border);
-            background: var(--bg-card);
-            color: var(--text-main);
-            font-size: 0.9rem;
-            border-radius: 0.6rem;
-            font-family: inherit;
-            outline: none;
-            transition: border-color 0.15s, box-shadow 0.15s;
-        }
-
-        textarea { 
-            resize: vertical; 
-            min-height: 80px;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 2px var(--accent-soft);
-        }
-
-        .alert-box {
-            margin-top: 0.6rem;
-            padding: 0.6rem;
-            border-radius: 0.4rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            border-left: 3px solid;
-        }
-
-        .alert-ok {
-            background: var(--ok-soft);
-            color: var(--ok);
-            border-left-color: var(--ok);
-        }
-
-        .alert-warn {
-            background: var(--warn-soft);
-            color: var(--warn);
-            border-left-color: var(--warn);
-        }
-
-        .alert-danger {
-            background: var(--danger-soft);
-            color: var(--danger);
-            border-left-color: var(--danger);
-        }
-
-        .lesion-section {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            padding: 1.2rem;
-            margin-bottom: 1rem;
-            border-radius: 0.6rem;
-            display: none;
-        }
-
-        .lesion-section.active {
-            display: block;
-            border-color: var(--danger);
-            background: var(--danger-soft);
-        }
-
-        .lesion-toggle {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            cursor: pointer;
-            margin-bottom: 1rem;
-        }
-
-        .lesion-toggle input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-
-        .lesion-toggle label {
-            margin: 0;
-            font-size: 0.9rem;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 0.8rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-
-        button {
-            padding: 0.65rem 1.3rem;
-            border: none;
-            border-radius: 0.7rem;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent), #1d4ed8);
-            color: white;
-            flex: 1;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.2);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
-        }
-
-        .btn-reset {
-            background: var(--chip-bg);
-            color: var(--text-main);
-            border: 1px solid var(--border);
-        }
-
-        .btn-reset:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        .result {
-            display: none;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 0.8rem;
-            padding: 1.6rem;
-            margin-top: 2rem;
-            font-size: 0.85rem;
-            line-height: 1.6;
-        }
-
-        .result.active {
-            display: block;
-            animation: slideIn 0.4s ease;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .result-header {
-            font-weight: 700;
-            font-size: 0.95rem;
-            color: var(--text-main);
-            margin-bottom: 1.2rem;
-            padding-bottom: 0.8rem;
-            border-bottom: 2px solid var(--border);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .result-section {
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background: var(--bg);
-            border-radius: 0.6rem;
-            border-left: 4px solid var(--accent);
-        }
-
-        .result-section-title {
-            font-weight: 600;
-            color: var(--text-main);
-            margin-bottom: 0.6rem;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-
-        .result-content {
-            color: var(--text-main);
-            font-size: 0.8rem;
-            line-height: 1.6;
-        }
-
-        .status-yes { 
-            color: var(--ok); 
-            font-weight: 700; 
-        }
-
-        .status-no { 
-            color: var(--danger); 
-            font-weight: 700; 
-        }
-
-        .status-partial { 
-            color: var(--warn); 
-            font-weight: 700; 
-        }
-
-        .conclusione-box {
-            background: var(--warn-soft);
-            border-left: 4px solid var(--warn);
-            padding: 1.2rem;
-            margin-top: 1.5rem;
-            border-radius: 0.6rem;
-            line-height: 1.7;
-            font-size: 0.85rem;
-        }
-
-        .workup-list { 
-            margin-left: 1.5rem; 
-            margin-top: 0.8rem; 
-        }
-
-        .workup-list li { 
-            margin-bottom: 0.4rem; 
-            list-style-type: disc;
-            line-height: 1.6;
-        }
-
-        .footer {
-            background: linear-gradient(135deg, #1f2937, #111827);
-            color: #e5e7eb;
-            padding: 1.5rem;
-            text-align: center;
-            font-size: 0.7rem;
-            line-height: 1.6;
-            border-top: 1px solid var(--border);
-            margin-top: 3rem;
-        }
-
-        .footer a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 700px) {
-            .content {
-                padding: 1rem;
-            }
-            
-            .header {
-                padding: 1.5rem;
-            }
-
-            .header h1 {
-                font-size: 1.3rem;
-            }
-
-            .field-group {
-                grid-template-columns: 1fr;
-            }
-
-            button {
-                font-size: 0.8rem;
-                padding: 0.5rem 1rem;
-            }
-        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+        .container{max-width:1200px;margin:0 auto;background:var(--bg-card);border-radius:1rem;box-shadow:0 1px 3px rgba(0,0,0,.05);overflow:hidden}
+        .header{background:linear-gradient(135deg,var(--accent),#1d4ed8);color:#fff;padding:2.5rem;text-align:center}
+        .header h1{font-size:1.75rem;margin-bottom:.4rem;letter-spacing:.02em}
+        .header p{font-size:.83rem;opacity:.9}
+        .content{padding:2rem}
+        .section{margin-bottom:1.4rem;padding:1.4rem;background:var(--bg-card);border:1px solid var(--border);border-radius:.8rem;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+        .section-title{font-size:.83rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:1rem;font-weight:700}
+        .fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:.8rem 1.1rem;margin-bottom:.5rem}
+        .fg.full{grid-template-columns:1fr}
+        .fg.two{grid-template-columns:1fr 1fr}
+        .fg.three{grid-template-columns:1fr 1fr 1fr}
+        .f{display:flex;flex-direction:column;gap:.25rem}
+        label{font-weight:500;font-size:.78rem;color:var(--text)}
+        input,select,textarea{width:100%;padding:.45rem .55rem;border:1px solid var(--border);background:var(--bg-card);color:var(--text);font-size:.88rem;border-radius:.55rem;font-family:inherit;outline:none;transition:border-color .15s,box-shadow .15s}
+        textarea{resize:vertical;min-height:64px}
+        input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+        .alert-box{margin-top:.35rem;padding:.45rem .55rem;border-radius:.35rem;font-size:.7rem;font-weight:600;border-left:3px solid}
+        .ok-a{background:var(--ok-soft);color:var(--ok);border-left-color:var(--ok)}
+        .warn-a{background:var(--warn-soft);color:var(--warn);border-left-color:var(--warn)}
+        .lt{display:flex;align-items:center;gap:.7rem;cursor:pointer;margin-bottom:.7rem}
+        .lt input[type=checkbox]{width:17px;height:17px;cursor:pointer}
+        .lt label{margin:0;font-size:.88rem;cursor:pointer;font-weight:500}
+        .ld{background:var(--bg);border:1px solid var(--border);padding:1.1rem;margin-bottom:.4rem;border-radius:.55rem;display:none}
+        .ld.active{display:block;border-color:var(--accent)}
+        .mgt{background:#eef2ff;border:1px solid #c7d2fe;border-radius:.45rem;padding:.7rem;margin-top:.5rem;font-size:.74rem;line-height:1.5}
+        .mgt table{width:100%;border-collapse:collapse}
+        .mgt th{text-align:left;font-weight:700;color:var(--muted);padding:.18rem .35rem;font-size:.68rem;text-transform:uppercase}
+        .mgt td{padding:.22rem .35rem;border-top:1px solid #c7d2fe;vertical-align:top}
+        .note-peso{font-size:.7rem;color:var(--muted);margin-top:.35rem;font-style:italic}
+        .btn-g{display:flex;gap:.7rem;margin-top:1.8rem;flex-wrap:wrap}
+        button{padding:.6rem 1.2rem;border:none;border-radius:.65rem;font-size:.88rem;font-weight:500;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:.35rem}
+        .btn-p{background:linear-gradient(135deg,var(--accent),#1d4ed8);color:#fff;flex:1;box-shadow:0 2px 8px rgba(37,99,235,.2)}
+        .btn-p:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,.3)}
+        .btn-r{background:var(--chip);color:var(--text);border:1px solid var(--border)}
+        .btn-c{background:var(--ok-soft);color:var(--ok);border:1px solid var(--ok);font-size:.83rem}
+        .btn-c:hover{background:var(--ok);color:#fff}
+        /* output */
+        .result{display:none;background:var(--bg-card);border:1px solid var(--border);border-radius:.8rem;padding:1.7rem;margin-top:1.8rem}
+        .result.active{display:block;animation:si .35s ease}
+        @keyframes si{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+        .rtitle{font-weight:700;font-size:.92rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:1.3rem;padding-bottom:.7rem;border-bottom:2px solid var(--border)}
+        .diag-box{background:#1e3a5f;color:#e2eaff;border-radius:.65rem;padding:1rem 1.2rem;margin-bottom:1.3rem;font-size:.8rem;line-height:1.75}
+        .diag-title{font-weight:700;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:#93b4e0;margin-bottom:.4rem}
+        .diag-item{color:#c8daff}
+        .diag-item strong{color:#fff}
+        .rb{margin-bottom:1rem;padding:.85rem 1rem;background:var(--bg);border-radius:.55rem;border-left:4px solid var(--accent);font-family:"Georgia","Times New Roman",serif;font-size:.87rem;line-height:1.88}
+        .rb.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+        .rb.danger{border-left-color:var(--danger);background:var(--danger-soft)}
+        .rb.ok{border-left-color:var(--ok);background:var(--ok-soft)}
+        .rb.neutral{border-left-color:#9ca3af;background:#f9fafb}
+        .rl{font-family:system-ui,sans-serif;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:var(--muted);margin-bottom:.4rem}
+        .cb{background:var(--warn-soft);border-left:4px solid var(--warn);padding:1.1rem 1.2rem;border-radius:.55rem;margin-top:1.1rem;font-family:"Georgia",serif;font-size:.87rem;line-height:1.88}
+        .cb.ok{background:var(--ok-soft);border-left-color:var(--ok)}
+        .cb.danger{background:var(--danger-soft);border-left-color:var(--danger)}
+        .cb-title{font-family:system-ui,sans-serif;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem}
+        .footer{background:linear-gradient(135deg,#1f2937,#111827);color:#9ca3af;padding:1.4rem;text-align:center;font-size:.67rem;line-height:1.7;margin-top:3rem}
+        @media(max-width:700px){.content{padding:1rem}.header{padding:1.5rem}.header h1{font-size:1.3rem}.fg,.fg.two,.fg.three{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🔬 Esame Istologico della Placenta</h1>
-            <p>Macroscopico • Cordone • Pilastri • Lesioni • Conclusioni specifiche</p>
+<div class="container">
+<div class="header">
+    <h1>🔬 Esame Istologico della Placenta</h1>
+    <p>Macroscopico · Campionamento · MVM · FVM · Villite · Corioamnionite · Referto in linguaggio naturale · Amsterdam/Redline</p>
+    <p style="margin-top:.5rem;font-size:.72rem;opacity:.6;letter-spacing:.08em">v4.0 — SC Anatomia Patologica ASST Fatebenefratelli-Sacco, Milano</p>
+    <button type="button" onclick="nuovoCaso()" style="margin-top:1rem;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);padding:.45rem 1rem;border-radius:.6rem;font-size:.82rem;font-weight:600;cursor:pointer;letter-spacing:.03em">🆕 Nuovo caso</button>
+</div>
+<div class="content">
+<form id="pForm">
+
+<!-- MACROSCOPICO -->
+<div class="section">
+<div class="section-title">🔍 Macroscopico</div>
+<div class="fg">
+    <div class="f"><label>EGA – Settimane</label><input type="number" id="ega_s" min="16" max="42" value="40" oninput="checkPeso()"></div>
+    <div class="f"><label>EGA – Giorni (0–6)</label><input type="number" id="ega_g" min="0" max="6" value="0" oninput="checkPeso()"></div>
+    <div class="f"><label>Peso (g)</label><input type="number" id="peso" min="50" max="1500" value="500" oninput="checkPeso()"><div id="pa"></div><div class="note-peso">Confronto con tabella orientativa interna, non sostitutiva di curve percentile validate; per la valutazione percentile utilizzare curve validate, es. Pinar et al. 2011.</div></div>
+    <div class="f"><label>Spessore (mm)</label><input type="number" id="spess" min="5" max="70" value="25" oninput="checkSpess()"><div id="sa"></div></div>
+</div>
+<div class="fg">
+    <div class="f"><label>Superficie fetale</label>
+        <select id="asp_f"><option value="">—</option><option value="lucida (normale)">Lucida (normale)</option><option value="opaca">Opaca</option><option value="furfuracea">Furfuracea</option><option value="nodulare">Nodulare</option></select></div>
+    <div class="f"><label>Colorito</label>
+        <select id="col"><option value="">—</option><option value="rosso-brunastro (normale)">Rosso-brunastro</option><option value="pallido">Pallido</option><option value="scuro/marrone">Scuro/marrone</option><option value="giallastro">Giallastro</option></select></div>
+    <div class="f"><label>Lesioni macroscopiche</label>
+        <select id="les_m"><option value="non identificate">Non identificate</option><option value="aree pallide (infarto?)">Aree pallide (infarto?)</option><option value="aree emorragiche">Aree emorragiche</option><option value="coagulo retro-placentare">Coagulo retro-placentare</option><option value="cisti">Cisti</option></select></div>
+</div>
+<div class="fg">
+    <div class="f"><label>Lunghezza cordone (cm)</label><input type="number" id="lc" min="5" max="130" value="50" oninput="checkCord()"><div id="ca"></div></div>
+    <div class="f"><label>Inserzione</label>
+        <select id="ins"><option value="centrale">Centrale</option><option value="eccentrica">Eccentrica</option><option value="marginale (a racchetta)">Marginale (a racchetta)</option><option value="velamentosa">Velamentosa</option></select></div>
+    <div class="f"><label>Vasi cordone</label>
+        <select id="vasi" onchange="checkVasi()"><option value="3">3 vasi (normale)</option><option value="2">2 vasi (arteria singola)</option></select><div id="va"></div></div>
+    <div class="f"><label>Aspetto cordone</label>
+        <select id="asp_c"><option value="normoconformato e turgido">Normoconformato e turgido</option><option value="sottile/ipoplasico">Sottile/ipoplasico</option><option value="edematoso">Edematoso</option><option value="con segni di trombosi">Con trombosi</option><option value="con ipercoiling">Con ipercoiling</option></select></div>
+</div>
+</div>
+
+<!-- CAMPIONAMENTO -->
+<div class="section">
+<div class="section-title">🗂 Campionamento</div>
+<div class="fg">
+    <div class="f"><label>Sezioni disco (n°)</label><input type="number" id="c_disco" min="1" max="20" value="3"></div>
+    <div class="f"><label>Membrane</label>
+        <select id="c_memb"><option value="campionate">Campionate</option><option value="non campionate">Non campionate</option><option value="non disponibili">Non disponibili</option></select></div>
+    <div class="f"><label>Cordone</label>
+        <select id="c_cord"><option value="campionato">Campionato</option><option value="non campionato">Non campionato</option></select></div>
+    <div class="f"><label>Lesioni macroscopiche campionate</label>
+        <select id="c_les"><option value="n.a.">N.A.</option><option value="sì">Sì</option><option value="no">No</option></select></div>
+</div>
+</div>
+
+<!-- PILASTRI -->
+<div class="section">
+<div class="section-title">🔬 Pilastri Fondamentali</div>
+<div class="fg two">
+    <div class="f"><label>EGA istologica</label>
+        <select id="ega_ist"><option value="">—</option><option value="compatibile">Compatibile con EGA clinica</option><option value="precoce">Appare più precoce</option><option value="tardiva">Appare più tardiva</option></select></div>
+    <div class="f"><label>Maturazione villare globale</label>
+        <select id="mat_v"><option value="">—</option><option value="adeguata">Adeguata (villi terminali, fenestrazioni, nuclei marginali)</option><option value="intermedia">Intermedia (coesistenza stadi)</option><option value="ritardata">Ritardata — Delayed villous maturation</option><option value="accelerata">Accelerata — Accelerated villous maturation</option><option value="degenerativa">Degenerativa (edema, necrosi sinciziale)</option></select></div>
+</div>
+<div class="fg two">
+    <div class="f"><label>Nodi sinciziali</label>
+        <select id="nodi"><option value="in quota fisiologica">In quota fisiologica</option><option value="aumentati (>30% villi terminali)">Aumentati (>30% — MVM)</option><option value="ridotti">Ridotti</option></select></div>
+    <div class="f"><label>Fibrina perivillosa</label>
+        <select id="fibr"><option value="assente o minima">Assente o minima</option><option value="focale">Focale</option><option value="estesa (>25% parenchima campionato)">Estesa >25% (valutare MPFD)</option></select></div>
+</div>
+</div>
+
+<!-- MVM -->
+<div class="section">
+<div class="section-title">🔴 Lesioni MVM — Maternal Vascular Malperfusion</div>
+<div class="lt"><input type="checkbox" id="mvm_check" onchange="toggleD('mvm_det')"><label for="mvm_check"><strong>Lesioni MVM presenti</strong></label></div>
+<div id="mvm_det" class="ld">
+    <div style="font-size:.75rem;color:var(--muted);margin-bottom:.8rem;">Ogni checkbox attiva la voce corrispondente nel referto. Nessuna voce è obbligatoria.</div>
+
+    <div class="lt"><input type="checkbox" id="mvm_infarti" onchange="toggleD('mvm_inf_det')"><label for="mvm_infarti"><strong>Infarti placentari</strong></label></div>
+    <div id="mvm_inf_det" class="ld" style="border-color:var(--warn);background:var(--warn-soft)">
+        <div class="fg">
+            <div class="f"><label>Estensione</label>
+                <select id="inf_est"><option value="focale (1–2 aree)">Focale (1–2 aree)</option><option value="multifocale (≥3 aree)">Multifocale (≥3 aree)</option><option value="estesa (>25% parenchima)">Estesa (>25%)</option></select></div>
+            <div class="f"><label>Localizzazione</label>
+                <select id="inf_loc"><option value="periferica/subculorale">Periferica/subculorale</option><option value="centrale">Centrale</option><option value="diffusa">Diffusa</option></select></div>
+            <div class="f"><label>% parenchima (stima)</label><input type="number" id="inf_pct" min="1" max="100" step="5" value="5"></div>
+            <div class="f"><label>Aspetto temporale</label>
+                <select id="inf_tmp"><option value="recenti (necrosi coagulativa)">Recenti</option><option value="organizzati (fibrosi, ombre villose)">Organizzati</option><option value="misti">Misti</option></select></div>
         </div>
-        
-        <div class="content">
-            <form id="placentaForm">
-                <!-- MACROSCOPICO -->
-                <div class="section">
-                    <div class="section-title">🔍 Macroscopico</div>
-                    
-                    <div class="field-group">
-                        <div class="field">
-                            <label>EGA - Settimane</label>
-                            <input type="number" id="ega_clinica_sett" min="16" max="42" value="40" required oninput="checkPeso()">
-                        </div>
-                        <div class="field">
-                            <label>EGA - Giorni (0-6)</label>
-                            <input type="number" id="ega_clinica_giorni" min="0" max="6" value="0" oninput="checkPeso()">
-                        </div>
-                    </div>
-
-                    <div class="field-group">
-                        <div class="field">
-                            <label>Peso placenta (g)</label>
-                            <input type="number" id="peso_placenta" min="100" max="1000" value="500" oninput="checkPeso()">
-                            <div id="peso_alert"></div>
-                        </div>
-                        <div class="field">
-                            <label>Spessore (mm)</label>
-                            <input type="number" id="spessore" min="10" max="60" step="1" value="25" oninput="checkSpessore()">
-                            <div id="spessore_alert"></div>
-                        </div>
-                    </div>
-
-                    <div class="field-group">
-                        <div class="field">
-                            <label>Lunghezza cordone (cm)</label>
-                            <input type="number" id="lunghezza_cordone" min="10" max="100" value="50" oninput="checkCordone()">
-                            <div id="cordone_alert"></div>
-                        </div>
-                    </div>
-
-                    <div class="field-group">
-                        <div class="field">
-                            <label>Aspetto superficie fetale</label>
-                            <select id="aspetto_fetale" required>
-                                <option value="">Seleziona...</option>
-                                <option value="Normale (lucido)">Normale (lucido)</option>
-                                <option value="Opaco">Opaco</option>
-                                <option value="Furfureo">Furfureo</option>
-                                <option value="Nodulare">Nodulare</option>
-                            </select>
-                        </div>
-                        <div class="field">
-                            <label>Colore placenta</label>
-                            <select id="colore_placenta" required>
-                                <option value="">Seleziona...</option>
-                                <option value="Rosso (normale)">Rosso (normale)</option>
-                                <option value="Pallido">Pallido</option>
-                                <option value="Scuro/marrone">Scuro/marrone</option>
-                                <option value="Giallastro">Giallastro</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="field-group full">
-                        <div class="field">
-                            <label>Aspetto cordone ombelicale</label>
-                            <select id="aspetto_cordone" required>
-                                <option value="">Seleziona...</option>
-                                <option value="Normale (turgido)">Normale (turgido)</option>
-                                <option value="Sottile/ipoplasico">Sottile / ipoplasico</option>
-                                <option value="Edematoso">Edematoso</option>
-                                <option value="Con trombosi">Con trombosi</option>
-                                <option value="Con amnios nodosum">Con amnios nodosum</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="field-group">
-                        <div class="field">
-                            <label>Inserzione cordone</label>
-                            <select id="inserzione_cordone">
-                                <option value="Centrale">Centrale</option>
-                                <option value="Eccentrica">Eccentrica</option>
-                                <option value="Marginale (a racchetta)">Marginale (a racchetta)</option>
-                                <option value="Velamentosa">Velamentosa</option>
-                            </select>
-                        </div>
-                        <div class="field">
-                            <label>Numero vasi cordone</label>
-                            <select id="vasi_cordone" onchange="checkVasiCordone()">
-                                <option value="3">3 vasi (normale)</option>
-                                <option value="2">2 vasi (arteria ombelicale singola)</option>
-                            </select>
-                            <div id="vasi_cordone_alert"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PILASTRI FONDAMENTALI -->
-                <div class="section">
-                    <div class="section-title">🔬 Pilastri Fondamentali</div>
-                    
-                    <div class="field-group">
-                        <div class="field">
-                            <label>EGA all'istologia</label>
-                            <select id="ega_istologia" required>
-                                <option value="">Seleziona...</option>
-                                <option value="compatibile">Compatibile con l'EGA clinica</option>
-                                <option value="precoce">Più precoce del previsto</option>
-                                <option value="tardiva">Più tardiva del previsto</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="field-group full">
-                        <div class="field">
-                            <label>Maturazione villare</label>
-                            <select id="villi_stato" required>
-                                <option value="">Seleziona...</option>
-                                <option value="maturi">Maturi (sincizio sottile, fenestrazioni, nuclei marginali)</option>
-                                <option value="intermedi">Intermedi (mix immaturi-maturi)</option>
-                                <option value="immaturi">Immaturi (Langhans prominenti)</option>
-                                <option value="degenerativi">Degenerativi (edema, sinciziale necrotico)</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- INFARTI -->
-                <div class="section">
-                    <div class="section-title">🔴 Lesione 1: Infarti Placentari</div>
-                    <div class="lesion-toggle">
-                        <input type="checkbox" id="infarti_presenti" onchange="toggleInfarti()">
-                        <label for="infarti_presenti"><strong>Infarti placentari presenti</strong></label>
-                    </div>
-
-                    <div id="infarti_dettagli" class="lesion-section">
-                        <div class="field-group">
-                            <div class="field">
-                                <label>Estensione</label>
-                                <select id="infarti_estensione" required>
-                                    <option value="">Seleziona...</option>
-                                    <option value="Focale">Focale (1-2 aree limitate)</option>
-                                    <option value="Multifocale">Multifocale (3+ aree)</option>
-                                    <option value="Estesa">Estesa (>25% parenchima)</option>
-                                </select>
-                            </div>
-                            <div class="field">
-                                <label>Localizzazione</label>
-                                <select id="infarti_localizzazione" required>
-                                    <option value="">Seleziona...</option>
-                                    <option value="Periferica">Periferica</option>
-                                    <option value="Centrale">Centrale</option>
-                                    <option value="Diffusa">Diffusa</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="field-group full">
-                            <div class="field">
-                                <label>% parenchima coinvolto (stima)</label>
-                                <input type="number" id="infarti_percentuale" min="0" max="100" step="5" value="10">
-                            </div>
-                        </div>
-                        <div class="field-group full">
-                            <div class="field">
-                                <label>Note</label>
-                                <textarea id="infarti_note" placeholder="Es. Infarti con bordo di flogosi cronica..."></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- VILLITE -->
-                <div class="section">
-                    <div class="section-title">🟡 Lesione 2: Villite</div>
-                    <div class="lesion-toggle">
-                        <input type="checkbox" id="villite_presenti" onchange="toggleVillite()">
-                        <label for="villite_presenti"><strong>Villite presente</strong></label>
-                    </div>
-
-                    <div id="villite_dettagli" class="lesion-section">
-                        <div class="field-group">
-                            <div class="field">
-                                <label>Grado</label>
-                                <select id="villite_grado" required>
-                                    <option value="">Seleziona...</option>
-                                    <option value="Lieve">Lieve (infiltrato linfocitario focale)</option>
-                                    <option value="Moderata">Moderata (infiltrato multifocale)</option>
-                                    <option value="Severa">Severa (esteso, compromette villi)</option>
-                                </select>
-                            </div>
-                            <div class="field">
-                                <label>Distribuzione</label>
-                                <select id="villite_distribuzione" required>
-                                    <option value="">Seleziona...</option>
-                                    <option value="Focale">Focale</option>
-                                    <option value="Multifocale">Multifocale</option>
-                                    <option value="Diffusa">Diffusa</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="field-group full">
-                            <div class="field">
-                                <label>Eziologia</label>
-                                <select id="villite_eziologia">
-                                    <option value="VUE">VUE — Villite di Eziologia Sconosciuta</option>
-                                    <option value="Infettiva">Sospetta infettiva</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="field-group full">
-                            <div class="field">
-                                <label>Tipo infiltrato</label>
-                                <select id="villite_tipo">
-                                    <option value="Non specifico">Non specifico</option>
-                                    <option value="Linfocitario">Prevalentemente linfocitario</option>
-                                    <option value="Plasmatico">Prevalentemente plasmatico</option>
-                                    <option value="Misto">Misto linfo-plasmatico</option>
-                                    <option value="Granulocitario">Con componente granulocitaria</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="field-group full">
-                            <div class="field">
-                                <label>Sospetto eziologico</label>
-                                <textarea id="villite_note" placeholder="Es. Villite linfocitica diffusa, suggestiva di infezione congenita..."></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CALCIFICAZIONI -->
-                <div class="section">
-                    <div class="section-title">🟢 Lesione 3: Calcificazioni</div>
-                    <div class="lesion-toggle">
-                        <input type="checkbox" id="calcif_presenti" onchange="toggleCalcif()">
-                        <label for="calcif_presenti"><strong>Calcificazioni presenti</strong></label>
-                    </div>
-
-                    <div id="calcif_dettagli" class="lesion-section">
-                        <div class="field-group">
-                            <div class="field">
-                                <label>Distribuzione</label>
-                                <select id="calcif_distribuzione" required>
-                                    <option value="">Seleziona...</option>
-                                    <option value="Periferica">Periferica (margini)</option>
-                                    <option value="Centrale">Centrale</option>
-                                    <option value="Diffusa">Diffusa</option>
-                                </select>
-                            </div>
-                            <div class="field">
-                                <label>Stadio</label>
-                                <select id="calcif_stadio" required>
-                                    <option value="">Seleziona...</option>
-                                    <option value="Scarsa">Scarsa (fisiologica)</option>
-                                    <option value="Moderata">Moderata (patologica)</option>
-                                    <option value="Diffusa">Diffusa e marcata</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="field-group full">
-                            <div class="field">
-                                <label>Aspetto microscopico</label>
-                                <select id="calcif_aspetto">
-                                    <option value="Non specificato">Non specificato</option>
-                                    <option value="Sparse, fini">Sparse, fini</option>
-                                    <option value="Depositi solidi">Depositi solidi</option>
-                                    <option value="Massivi">Massivi e confluenti</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="field-group full">
-                            <div class="field">
-                                <label>Interpretazione clinica</label>
-                                <textarea id="calcif_note" placeholder="Es. Calcificazioni diffuse a termine = marker di stress placentare..."></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CORIOAMNIONITE -->
-                <div class="section">
-                    <div class="section-title">🟠 Lesione 4: Corioamnionite</div>
-                    <div class="lesion-toggle">
-                        <input type="checkbox" id="corio_presente" onchange="toggleCorio()">
-                        <label for="corio_presente"><strong>Corioamnionite presente</strong></label>
-                    </div>
-
-                    <div id="corio_dettagli" class="lesion-section">
-                        <div class="field-group">
-                            <div class="field">
-                                <label>Risposta materna (MIR) — Criteri Amsterdam</label>
-                                <select id="corio_mir">
-                                    <option value="">Seleziona...</option>
-                                    <option value="MIR 1">Grado 1 — Subamniotica</option>
-                                    <option value="MIR 2">Grado 2 — Corionica</option>
-                                    <option value="MIR 3">Grado 3 — Necrotizzante</option>
-                                </select>
-                            </div>
-                            <div class="field">
-                                <label>Risposta fetale (FIR) — Criteri Amsterdam</label>
-                                <select id="corio_fir">
-                                    <option value="">Seleziona...</option>
-                                    <option value="Nessuna">Nessuna risposta fetale</option>
-                                    <option value="FIR 1">Grado 1 — Flebite/arterite ombelicale</option>
-                                    <option value="FIR 2">Grado 2 — Vasculite corionica</option>
-                                    <option value="FIR 3">Grado 3 — Funisite necrotizzante</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="field-group full">
-                            <div class="field">
-                                <label>Note</label>
-                                <textarea id="corio_note" placeholder="Es. Infiltrato granulocitario subamniotico con early FIR..."></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- NOTE AGGIUNTIVE -->
-                <div class="section">
-                    <div class="section-title">📝 Note Aggiuntive</div>
-                    <div class="field-group full">
-                        <div class="field">
-                            <label>Altre osservazioni</label>
-                            <textarea id="note_aggiuntive" placeholder="Es. Corioamnionite, amniotite, emorragia, edema..."></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- BOTTONI -->
-                <div class="button-group">
-                    <button type="button" class="btn-primary" onclick="genera_referto()">📄 Genera Referto</button>
-                    <button type="reset" class="btn-reset">🔄 Reset</button>
-                </div>
-            </form>
-
-            <!-- RISULTATO -->
-            <div id="result" class="result">
-                <div class="result-header">Referto Istologico - Placenta</div>
-
-                <div class="result-section">
-                    <div class="result-section-title">Macroscopico</div>
-                    <div class="result-content" id="macro_output"></div>
-                </div>
-
-                <div class="result-section">
-                    <div class="result-section-title">Pilastri Fondamentali</div>
-                    <div class="result-content" id="pilastri_output"></div>
-                </div>
-
-                <div class="result-section">
-                    <div class="result-section-title">🔴 Infarti Placentari</div>
-                    <div class="result-content" id="infarti_output"></div>
-                </div>
-
-                <div class="result-section">
-                    <div class="result-section-title">🟡 Villite</div>
-                    <div class="result-content" id="villite_output"></div>
-                </div>
-
-                <div class="result-section">
-                    <div class="result-section-title">🟢 Calcificazioni</div>
-                    <div class="result-content" id="calcif_output"></div>
-                </div>
-
-                <div class="result-section" id="corio_result" style="display: none;">
-                    <div class="result-section-title">🟠 Corioamnionite</div>
-                    <div class="result-content" id="corio_output"></div>
-                </div>
-
-                <div class="result-section" id="note_aggiuntive_result" style="display: none;">
-                    <div class="result-section-title">Altre Osservazioni</div>
-                    <div class="result-content" id="note_aggiuntive_output"></div>
-                </div>
-
-                <div class="conclusione-box">
-                    <div style="font-weight: 700; margin-bottom: 0.8rem;">Conclusione e Indicazioni Cliniche:</div>
-                    <div id="conclusione"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer">
-            <strong>Riferimenti Bibliografici</strong><br>
-            Benirschke K, Kaufmann P, Baergen RN. <em>Pathology of the Human Placenta</em>. 6th ed. Springer; 2012.<br>
-            ISSHP (International Society for the Study of Hypertension in Pregnancy). Guidelines on insufficienza placentare e preeclampsia.<br>
-            SIPat (Società Italiana di Anatomia Patologica). Linee guida per refertazione istologica placentare.
+        <div class="fg full" style="margin-top:.4rem">
+            <div class="f"><label>Contesto clinico</label>
+                <select id="inf_ctx"><option value="a termine, senza complicanze note">A termine, senza complicanze</option><option value="precoci o associati a IUGR/preeclampsia">Precoci o + IUGR/preeclampsia</option><option value="associati a morte endouterina">+ morte endouterina</option></select></div>
         </div>
     </div>
 
-    <script>
-        function checkSpessore() {
-            const spessore = parseInt(document.getElementById('spessore').value);
-            const alert_div = document.getElementById('spessore_alert');
+    <div style="font-size:.75rem;font-weight:600;color:var(--muted);margin:.8rem 0 .4rem">Lesioni vascolari materne (selezionare quelle presenti):</div>
+    <div class="fg two">
+        <div class="lt" style="margin-bottom:0"><input type="checkbox" id="mvm_art"><label for="mvm_art">Arteriopatia deciduale (decidual arteriopathy)</label></div>
+        <div class="lt" style="margin-bottom:0"><input type="checkbox" id="mvm_ater"><label for="mvm_ater">Aterosi acuta (foam cell arteriopathy)</label></div>
+        <div class="lt" style="margin-bottom:0"><input type="checkbox" id="mvm_fib"><label for="mvm_fib">Necrosi fibrinoide arterie spirali</label></div>
+        <div class="lt" style="margin-bottom:0"><input type="checkbox" id="mvm_ipo"><label for="mvm_ipo">Ipoplasia villare distale</label></div>
+        <div class="lt" style="margin-bottom:0"><input type="checkbox" id="mvm_avm"><label for="mvm_avm">Accelerated villous maturation</label></div>
+        <div class="lt" style="margin-bottom:0"><input type="checkbox" id="mvm_nodi"><label for="mvm_nodi">Nodi sinciziali aumentati (>30% villi terminali)</label></div>
+    </div>
 
-            if (spessore < 15) {
-                alert_div.className = 'alert-box alert-danger';
-                alert_div.innerHTML = '🔴 Sottile/atrofica - Possibile insufficienza placentare';
-            } else if (spessore > 30) {
-                alert_div.className = 'alert-box alert-warn';
-                alert_div.innerHTML = '⚠️ Aumentata - Possibile edema/idrope';
+    <div class="fg full" style="margin-top:.7rem"><div class="f"><label>Note aggiuntive MVM</label><textarea id="mvm_note" placeholder="Es. arterie spirali con parete ispessita, lume ristretto, depositi fibrinoidi subendoteliali..."></textarea></div></div>
+</div>
+</div>
+
+<!-- FVM -->
+<div class="section">
+<div class="section-title">🟣 Lesioni FVM — Fetal Vascular Malperfusion</div>
+<div class="lt"><input type="checkbox" id="fvm_check" onchange="toggleD('fvm_det')"><label for="fvm_check"><strong>Lesioni FVM presenti</strong></label></div>
+<div id="fvm_det" class="ld">
+    <div class="fg three">
+        <div class="lt" style="margin-bottom:0"><input type="checkbox" id="fvm_trb"><label for="fvm_trb">Trombosi grossi vasi fetali coriali</label></div>
+        <div class="lt" style="margin-bottom:0"><input type="checkbox" id="fvm_avk"><label for="fvm_avk">Villi con karyorrhexis stromale-vascolare</label></div>
+        <div class="lt" style="margin-bottom:0"><input type="checkbox" id="fvm_av"><label for="fvm_av">Villi avascolari</label></div>
+        <div class="lt" style="margin-bottom:0"><input type="checkbox" id="fvm_enu"><label for="fvm_enu">Eritrociti nucleati in eccesso</label></div>
+        <div class="lt" style="margin-bottom:0"><input type="checkbox" id="fvm_ico"><label for="fvm_ico">Lesioni cordone: ipercoiling</label></div>
+        <div class="lt" style="margin-bottom:0"><input type="checkbox" id="fvm_kn"><label for="fvm_kn">Lesioni cordone: nodo vero (true knot)</label></div>
+    </div>
+    <div class="fg two" style="margin-top:.6rem">
+        <div class="f"><label>Distribuzione lesioni FVM</label>
+            <select id="fvm_distr"><option value="segmentale">Segmentale</option><option value="globale/diffusa">Globale/diffusa</option><option value="focale">Focale</option></select></div>
+        <div class="f"><label>Stima % villi coinvolti</label><input type="number" id="fvm_pct" min="1" max="100" step="5" value="5"></div>
+    </div>
+    <div class="fg full"><div class="f"><label>Note (sede trombosi, aspetto villi avascolari, ecc.)</label><textarea id="fvm_note" placeholder="Es. trombosi vena ombelicale con trombo organizzato; villi avascolari in cluster segmentale; obliterazione capillare..."></textarea></div></div>
+</div>
+</div>
+
+<!-- VILLITE -->
+<div class="section">
+<div class="section-title">🟡 Lesione — Villite</div>
+<div class="lt"><input type="checkbox" id="vil_check" onchange="toggleD('vil_det')"><label for="vil_check"><strong>Villite presente</strong></label></div>
+<div id="vil_det" class="ld">
+    <div class="fg three">
+        <div class="f"><label>Grado</label>
+            <select id="vil_g"><option value="lieve">Lieve</option><option value="moderata">Moderata</option><option value="severa">Severa</option></select></div>
+        <div class="f"><label>Distribuzione</label>
+            <select id="vil_d"><option value="focale">Focale</option><option value="multifocale">Multifocale</option><option value="diffusa">Diffusa</option></select></div>
+        <div class="f"><label>Infiltrato prevalente</label>
+            <select id="vil_t"><option value="linfocitario (CD8+)">Linfocitario (CD8+)</option><option value="con plasmacellule prominenti">Con plasmacellule prominenti</option><option value="con granulomi">Con granulomi</option><option value="con inclusi citomegalici">Con inclusi citomegalici</option><option value="misto linfo-plasmatico">Misto linfo-plasmatico</option></select></div>
+    </div>
+    <div class="fg full"><div class="f"><label>Orientamento eziologico (selezionare dopo valutazione morfologica)</label>
+        <select id="vil_e"><option value="VUE">Quadro compatibile con VUE, in assenza di criteri morfologici o clinici per eziologia infettiva</option><option value="infettiva">Morfologia non escludente eziologia infettiva — richiede correlazione clinico-sierologica</option></select></div></div>
+    <div class="mgt">
+        <strong>Griglia morfologica orientativa</strong>
+        <table>
+            <tr><th>Reperto istologico</th><th>Orienta verso</th></tr>
+            <tr><td>Linfociti CD8+ materni, multifocale, no inclusi, no granulomi</td><td>VUE (risposta immunomediata)</td></tr>
+            <tr><td>Plasmacellule prominenti nello stroma villare</td><td>Sifilide/Treponema — escludere</td></tr>
+            <tr><td>Granulomi necrotizzanti o epitelioidi</td><td>Infezione batterica/fungina, sarcoidosi-like</td></tr>
+            <tr><td>Inclusi intranucleari "owl-eye"</td><td>CMV</td></tr>
+            <tr><td>Necrosi villare con istiociti, pseudo-granulomatosa</td><td>Pattern severo — escludere infettivo</td></tr>
+        </table>
+    </div>
+    <div class="fg full"><div class="f"><label>Note morfologiche (inclusi, granulomi, plasmacellule, IHC eseguita...)</label><textarea id="vil_note" placeholder="Es. inclusi citomegalici assenti; plasmacellule rare e non diagnostiche; CMV-IHC negativa..."></textarea></div></div>
+</div>
+</div>
+
+<!-- CORIOAMNIONITE -->
+<div class="section">
+<div class="section-title">🟠 Lesione — Corioamnionite (criteri Amsterdam)</div>
+<div class="lt"><input type="checkbox" id="cor_check" onchange="toggleD('cor_det')"><label for="cor_check"><strong>Corioamnionite presente</strong></label></div>
+<div id="cor_det" class="ld">
+    <div class="fg two">
+        <div class="f"><label>Risposta materna (MIR)</label>
+            <select id="cor_mir"><option value="">—</option><option value="Grado 1 (subamniotica)">Grado 1 – Subamniotica</option><option value="Grado 2 (corionica)">Grado 2 – Corionica</option><option value="Grado 3 (necrotizzante)">Grado 3 – Necrotizzante</option></select></div>
+        <div class="f"><label>Risposta fetale (FIR)</label>
+            <select id="cor_fir"><option value="assente">Assente</option><option value="Grado 1 (flebite/arterite funicolare)">Grado 1 – Flebite/arterite</option><option value="Grado 2 (vasculite corionica)">Grado 2 – Vasculite corionica</option><option value="Grado 3 (funisite necrotizzante)">Grado 3 – Funisite necrotizzante</option></select></div>
+    </div>
+    <div class="fg full"><div class="f"><label>Note</label><textarea id="cor_note" placeholder="Es. infiltrato granulocitario subamniotico con neutrofili degenerati..."></textarea></div></div>
+</div>
+</div>
+
+<!-- CALCIFICAZIONI -->
+<div class="section">
+<div class="section-title">🟢 Lesione — Calcificazioni</div>
+<div class="lt"><input type="checkbox" id="cal_check" onchange="toggleD('cal_det')"><label for="cal_check"><strong>Calcificazioni presenti</strong></label></div>
+<div id="cal_det" class="ld">
+    <div class="fg three">
+        <div class="f"><label>Entità</label>
+            <select id="cal_e"><option value="scarse">Scarse (fisiologiche a termine)</option><option value="moderate">Moderate</option><option value="marcate e confluenti">Marcate e confluenti</option></select></div>
+        <div class="f"><label>Distribuzione</label>
+            <select id="cal_d"><option value="periferica">Periferica</option><option value="centrale">Centrale</option><option value="diffusa">Diffusa</option></select></div>
+        <div class="f"><label>Aspetto</label>
+            <select id="cal_a"><option value="sparse e fini">Sparse e fini</option><option value="a depositi solidi">A depositi solidi</option><option value="massive e confluenti">Massive e confluenti</option></select></div>
+    </div>
+    <div class="fg full"><div class="f"><label>Note</label><textarea id="cal_note" placeholder="Es. prevalentemente stromali, nessuna calcificazione vascolare..."></textarea></div></div>
+</div>
+</div>
+
+<!-- CHIV / MPFD / ALTRE -->
+<div class="section">
+<div class="section-title">➕ Altre Lesioni — CHIV · MPFD · Ulteriori</div>
+<div class="lt"><input type="checkbox" id="chiv_check" onchange="toggleD('chiv_det')"><label for="chiv_check"><strong>Istiocitosi intervillosa cronica (CHIV)</strong></label></div>
+<div id="chiv_det" class="ld">
+    <div class="fg two">
+        <div class="f"><label>Entità infiltrato istiocitario</label>
+            <select id="chiv_ent"><option value="focale">Focale</option><option value="moderata">Moderata</option><option value="diffusa (>50% spazio intervilloso)">Diffusa (>50% spazio intervilloso)</option></select></div>
+        <div class="f"><label>Distribuzione spaziale</label>
+            <select id="chiv_distr"><option value="multifocale">Multifocale</option><option value="diffusa">Diffusa</option><option value="focale">Focale</option></select></div>
+    </div>
+    <div class="fg two">
+        <div class="f"><label>IHC CD68/CD163</label>
+            <select id="chiv_ihc"><option value="non eseguita">Non eseguita</option><option value="CD68+ confermato">CD68+ confermato</option><option value="CD163+ confermato">CD163+ confermato</option></select></div>
+        <div class="f"><label>Associazione con fibrina perivillosa</label>
+            <select id="chiv_fib"><option value="assente">Assente</option><option value="focale">Focale</option><option value="estesa">Estesa (considerare CHIV+MPFD)</option></select></div>
+    </div>
+    <div class="fg full"><div class="f"><label>Componente infettiva esclusa?</label>
+        <select id="chiv_inf"><option value="non valutata formalmente">Non valutata formalmente</option><option value="esclusa su base morfologica">Esclusa su base morfologica</option><option value="esclusa con IHC/PCR">Esclusa con IHC/PCR</option></select></div></div>
+    <div class="fg full"><div class="f"><label>Note CHIV</label><textarea id="chiv_note" placeholder="Es. istiociti CD68+ nello spazio intervilloso, fibrina perivillosa assente, nessun agente infettivo identificato..."></textarea></div></div>
+</div>
+
+<div class="lt" style="margin-top:.8rem"><input type="checkbox" id="mpfd_check" onchange="toggleD('mpfd_det')"><label for="mpfd_check"><strong>Fibrina perivillosa massiva — MPFD / maternal floor infarction</strong></label></div>
+<div id="mpfd_det" class="ld">
+    <div class="fg two">
+        <div class="f"><label>Distribuzione fibrina</label>
+            <select id="mpfd_distr"><option value="basale (maternal floor)">Basale (maternal floor)</option><option value="transmurale">Transmurale</option><option value="irregolare/multifocale">Irregolare/multifocale</option></select></div>
+        <div class="f"><label>Stima % parenchima con intrappolamento villare</label><input type="number" id="mpfd_pct" min="1" max="100" step="5" value="30"></div>
+    </div>
+    <div class="fg two">
+        <div class="f"><label>Intrappolamento villare</label>
+            <select id="mpfd_intr"><option value="presente">Presente</option><option value="assente">Assente</option></select></div>
+        <div class="f"><label>Conferma su campionamento multiplo</label>
+            <select id="mpfd_conf"><option value="sì">Sì</option><option value="da confermare">Da confermare su sezioni aggiuntive</option></select></div>
+    </div>
+    <div class="fg full"><div class="f"><label>Note MPFD</label><textarea id="mpfd_note" placeholder="Es. fibrina PAS+, XVIIIa+, distribuzione prevalentemente basale..."></textarea></div></div>
+</div>
+
+<div class="fg full" style="margin-top:.9rem"><div class="f"><label>Ulteriori osservazioni morfologiche</label><textarea id="note_e" placeholder="Es. emorragia retro-placentare, edema stromale, amniotite, nodulo amniotico, inclusioni corioniche..."></textarea></div></div>
+</div>
+
+<div class="btn-g">
+    <button type="button" class="btn-p" onclick="genera()">📄 Genera Referto</button>
+    <button type="button" class="btn-r" onclick="nuovoCaso()">🆕 Nuovo caso</button>
+</div>
+</form>
+
+<!-- OUTPUT -->
+<div id="result" class="result">
+    <div class="rtitle">Referto Istologico — Placenta</div>
+    <div id="diag" class="diag-box"></div>
+    <div id="body"></div>
+    <div id="cb_wrap" class="cb">
+        <div class="cb-title">Commento clinico-patologico</div>
+        <div id="commento"></div>
+    </div>
+    <div style="margin-top:.9rem;display:flex;gap:.6rem;flex-wrap:wrap">
+        <button class="btn-c" onclick="copiaRef()">📋 Copia referto (testo)</button>
+    </div>
+</div>
+</div>
+
+<div class="footer">
+    Khong TY et al. Sampling and Definitions of Placental Lesions: Amsterdam Placental Workshop Group Consensus Statement. <em>Arch Pathol Lab Med.</em> 2016;140(7):698–713. &nbsp;|&nbsp;
+    Redline RW. Classification of placental lesions. <em>Am J Obstet Gynecol.</em> 2015;213(4 Suppl):S21–8. &nbsp;|&nbsp;
+    Benirschke K, Kaufmann P, Baergen RN. <em>Pathology of the Human Placenta.</em> 6th ed. Springer; 2012. &nbsp;|&nbsp;
+    Pinar H et al. Placental weight percentile curves for singleton and multiple pregnancies. <em>Pediatr Dev Pathol.</em> 2011;14(6):450–8.<br>
+    <strong>Uso interno SC AP ASST Fatebenefratelli-Sacco, Milano — non sostituisce il giudizio clinico del patologo.</strong>
+</div>
+</div>
+
+<script>
+// ── alerts ─────────────────────────────────────────────────────────────
+const PESO={16:100,18:125,20:170,22:200,24:225,26:255,28:285,30:315,32:355,34:385,36:415,37:430,38:445,39:460,40:470,41:480,42:490};
+function pesoAtt(e){
+    if(PESO[e]) return PESO[e];
+    const k=Object.keys(PESO).map(Number).sort((a,b)=>a-b);
+    for(let i=0;i<k.length-1;i++){
+        if(e>=k[i]&&e<=k[i+1]){const r=(e-k[i])/(k[i+1]-k[i]);return Math.round(PESO[k[i]]+r*(PESO[k[i+1]]-PESO[k[i]]))}
+    }
+    return Math.round(e*15-200);
+}
+function checkPeso(){
+    const e=parseInt(document.getElementById('ega_s').value)||40;
+    const p=parseInt(document.getElementById('peso').value)||500;
+    const a=pesoAtt(e),pct=Math.round(p/a*100),el=document.getElementById('pa');
+    if(pct<80){el.className='alert-box warn-a';el.innerHTML=`&#9888; ${pct}% del peso di riferimento (${a} g) — da correlare con dati clinici`;}
+    else if(pct>120){el.className='alert-box warn-a';el.innerHTML=`&#9888; ${pct}% del peso di riferimento (${a} g) — superiore all'atteso`;}
+    else{el.className='alert-box ok-a';el.innerHTML=`&#10003; ${pct}% del peso di riferimento (${a} g)`;}
+}
+function checkSpess(){
+    const v=parseInt(document.getElementById('spess').value)||25,el=document.getElementById('sa');
+    if(v<15){el.className='alert-box warn-a';el.innerHTML='&#9888; Ridotto — segnalare';}
+    else if(v>35){el.className='alert-box warn-a';el.innerHTML='&#9888; Aumentato — segnalare';}
+    else{el.className='alert-box ok-a';el.innerHTML='&#10003; Nella norma (15–35 mm)';}
+}
+function checkCord(){
+    const v=parseInt(document.getElementById('lc').value)||50,el=document.getElementById('ca');
+    if(v<30){el.className='alert-box warn-a';el.innerHTML='&#9888; Corto — segnalare';}
+    else if(v>80){el.className='alert-box warn-a';el.innerHTML='&#9888; Lungo — segnalare';}
+    else{el.className='alert-box ok-a';el.innerHTML='&#10003; Nella norma (30–80 cm)';}
+}
+function checkVasi(){
+    const v=document.getElementById('vasi').value,el=document.getElementById('va');
+    if(v==='2'){el.className='alert-box warn-a';el.innerHTML='&#9888; Arteria ombelicale singola — correlare con eco fetale';}
+    else{el.className='';el.innerHTML='';}
+}
+function toggleD(id){document.getElementById(id).classList.toggle('active');}
+
+// ── genera ─────────────────────────────────────────────────────────────
+function genera(){
+try{
+    const es=parseInt(document.getElementById('ega_s').value)||40;
+    const eg=parseInt(document.getElementById('ega_g').value)||0;
+    const egaStr=eg>0?`${es}+${eg} settimane`:`${es} settimane`;
+    const peso=parseInt(document.getElementById('peso').value)||500;
+    const att=pesoAtt(es),pct=Math.round(peso/att*100);
+    const sp=parseInt(document.getElementById('spess').value)||25;
+    const lc=parseInt(document.getElementById('lc').value)||50;
+    const aspF=document.getElementById('asp_f').value;
+    const col=document.getElementById('col').value;
+    const lesM=document.getElementById('les_m').value;
+    const ins=document.getElementById('ins').value;
+    const vasi=document.getElementById('vasi').value;
+    const aspC=document.getElementById('asp_c').value;
+    const cD=document.getElementById('c_disco').value;
+    const cM=document.getElementById('c_memb').value;
+    const cCo=document.getElementById('c_cord').value;
+    const cL=document.getElementById('c_les').value;
+    const egaIst=document.getElementById('ega_ist').value;
+    const matV=document.getElementById('mat_v').value;
+    const nodi=document.getElementById('nodi').value;
+    const fibr=document.getElementById('fibr').value;
+
+    const mvm_on=document.getElementById('mvm_check').checked;
+    const fvm_on=document.getElementById('fvm_check').checked;
+    const vil_on=document.getElementById('vil_check').checked;
+    const cor_on=document.getElementById('cor_check').checked;
+    const cal_on=document.getElementById('cal_check').checked;
+    const chiv_on=document.getElementById('chiv_check').checked;
+    const mpfd_on=document.getElementById('mpfd_check').checked;
+    const noteE=document.getElementById('note_e').value.trim();
+
+    // ── macroscopico ──
+    const pFrase=pct<80?` (${pct}% del peso di riferimento di ${att} g per EGA — da correlare con dati clinico-ostetrici; tabella orientativa interna)`:
+        pct>120?` (${pct}% del peso di riferimento di ${att} g — superiore all'atteso)`:
+        ` (${pct}% del peso di riferimento di ${att} g)`;
+    const spN=sp<15?' (ridotto)':sp>35?' (aumentato)':'';
+    const lcN=lc<30?' (corto)':lc>80?' (lungo)':'';
+    const vasiS=vasi==='2'?'a due vasi (arteria ombelicale singola; correlare con ecografia fetale)':'a tre vasi';
+    const colS=col?`, colorito ${col}`:'';
+    const aspFS=aspF?`, superficie fetale ${aspF}`:'';
+    const lesMstr=lesM!=='non identificate'?` Reperto macroscopico: ${lesM}.`:'';
+    const macroTxt=`La placenta pesa ${peso} g${pFrase}, spessore ${sp} mm${spN}${aspFS}${colS}.${lesMstr} Il cordone ombelicale presenta inserzione ${ins}, ${vasiS}, lunghezza ${lc} cm${lcN}, aspetto ${aspC}.`;
+
+    // ── campionamento ──
+    const cLstr=cL==='n.a.'?'':`, lesioni macroscopiche ${cL==='sì'?'campionate':'non campionate'}`;
+    const campTxt=`${cD} sezioni del disco placentare; membrane ${cM}; cordone ${cCo}${cLstr}.`;
+
+    // ── pilastri ──
+    const egaIstMap={compatibile:'risulta compatibile con',precoce:'appare istologicamente più precoce rispetto a',tardiva:'appare istologicamente più tardiva rispetto a'};
+    let pilTxt='';
+    if(egaIst) pilTxt+=`L'architettura placentare ${egaIstMap[egaIst]||'correla con'} l'EGA clinica di ${egaStr}. `;
+    const mMap={
+        adeguata:`I villi coriali mostrano maturazione adeguata, con villi terminali, fenestrazioni e nuclei sinciziali marginali.`,
+        intermedia:`I villi coriali presentano maturazione intermedia, con coesistenza di stadi differenziativi.`,
+        ritardata:`I villi coriali mostrano maturazione ritardata rispetto all'EGA (${egaStr}), con persistenza di citotrofoblasto di Langhans e riduzione delle membrane vasculo-sinciziali; reperto compatibile con delayed villous maturation, da correlare con il contesto clinico.`,
+        accelerata:`I villi coriali presentano maturazione accelerata rispetto all'EGA (${egaStr}); reperto compatibile con accelerated villous maturation, da correlare con condizioni associate a ipossia/stress placentare.`,
+        degenerativa:`I villi coriali presentano alterazioni degenerative con edema stromale e danno sinciziale.`
+    };
+    if(matV&&mMap[matV]) pilTxt+=mMap[matV]+' ';
+    if(nodi.includes('Aumentati')) pilTxt+=`Nodi sinciziali aumentati (>30% dei villi terminali); reperto che può rientrare nel pattern di maternal vascular malperfusion, se sostenuto da ulteriori dati morfologici e clinici. `;
+    if(fibr.includes('estesa')) pilTxt+=`Fibrina perivillosa estesa (>25% del parenchima campionato); quadro compatibile con/da valutare per massive perivillous fibrin deposition (MPFD) se confermato su campionamento rappresentativo. `;
+
+    // ── blocchi lesioni ──
+    let blocks=[];
+
+    // MVM
+    if(mvm_on){
+        const infP=document.getElementById('mvm_infarti').checked;
+        const artP=document.getElementById('mvm_art').checked;
+        const aterP=document.getElementById('mvm_ater').checked;
+        const fibP=document.getElementById('mvm_fib').checked;
+        const ipoP=document.getElementById('mvm_ipo').checked;
+        const avmP=document.getElementById('mvm_avm').checked;
+        const nodiP=document.getElementById('mvm_nodi').checked;
+        const nt=document.getElementById('mvm_note').value.trim();
+        let t='';
+        let _ctx='', _est='', _pct=0;
+        if(infP){
+            const est=document.getElementById('inf_est').value;
+            const loc=document.getElementById('inf_loc').value;
+            const p=document.getElementById('inf_pct').value;
+            const tmp=document.getElementById('inf_tmp').value;
+            const ctx=document.getElementById('inf_ctx').value;
+            _ctx=ctx; _est=est; _pct=parseInt(p);
+            t+=`Aree di necrosi coagulativa villare compatibili con infarto placentare, ${est}, a localizzazione ${loc}, con interessamento stimato di circa il ${p}% del parenchima esaminato; aspetto ${tmp}. Contesto: ${ctx}. `;
+        }
+        let lesAdd=[];
+        if(artP) lesAdd.push('arteriopatia deciduale (pareti ispessite, lume ristretto)');
+        if(aterP) lesAdd.push('aterosi acuta (foam cell arteriopathy)');
+        if(fibP) lesAdd.push('necrosi fibrinoide delle arterie spirali');
+        if(ipoP) lesAdd.push('ipoplasia villare distale');
+        if(avmP) lesAdd.push('accelerated villous maturation');
+        if(nodiP) lesAdd.push('nodi sinciziali aumentati (>30% dei villi terminali), reperto che può rientrare nel pattern MVM se sostenuto da ulteriori dati morfologici e clinici');
+        if(lesAdd.length>0) t+=`Lesioni vascolari materne identificate: ${lesAdd.join('; ')}.`;
+        if(nt) t+=` ${nt}.`;
+        if(t.trim()) blocks.push({label:'MVM — Lesioni da malperfusione vascolare materna',txt:t.trim(),cls:'warn',_ctx:_ctx,_est:_est,_pct:_pct});
+    }
+
+    // FVM
+    if(fvm_on){
+        const trb=document.getElementById('fvm_trb').checked;
+        const avk=document.getElementById('fvm_avk').checked;
+        const av=document.getElementById('fvm_av').checked;
+        const enu=document.getElementById('fvm_enu').checked;
+        const ico=document.getElementById('fvm_ico').checked;
+        const kn=document.getElementById('fvm_kn').checked;
+        const distr=document.getElementById('fvm_distr').value;
+        const pFvm=document.getElementById('fvm_pct').value;
+        const nt=document.getElementById('fvm_note').value.trim();
+        let rep=[];
+        if(trb) rep.push('trombosi di grossi vasi fetali coriali');
+        if(avk) rep.push('villi con karyorrhexis stromale-vascolare');
+        if(av) rep.push('villi avascolari');
+        if(enu) rep.push('eritrociti nucleati in eccesso');
+        if(ico) rep.push('ipercoiling del cordone');
+        if(kn) rep.push('nodo vero del cordone (true knot)');
+        if(rep.length===0) rep.push('nessuna sottolesione FVM specificata — verificare la selezione prima di finalizzare il referto');
+        let t=`Reperto morfologico compatibile con fetal vascular malperfusion (FVM), distribuzione ${distr}, con interessamento stimato del ${pFvm}% del parenchima. Lesioni identificate: ${rep.join('; ')}.`;
+        if(nt) t+=` ${nt}.`;
+        blocks.push({label:'FVM — Fetal Vascular Malperfusion',txt:t,cls:'danger'});
+    }
+
+    // villite
+    let vilEtio='';
+    if(vil_on){
+        const g=document.getElementById('vil_g').value;
+        const d=document.getElementById('vil_d').value;
+        vilEtio=document.getElementById('vil_e').value;
+        const tipo=document.getElementById('vil_t').value;
+        const nt=document.getElementById('vil_note').value.trim();
+        let t=`Villite ${d} di grado ${g}, con infiltrato prevalentemente ${tipo}.`;
+        if(vilEtio==='VUE'){
+            t+=` Quadro compatibile con Villite di Eziologia Sconosciuta (VUE), in assenza di criteri morfologici o clinici per eziologia infettiva.`;
+        } else {
+            t+=` Morfologia non escludente eziologia infettiva; necessaria correlazione clinico-sierologica.`;
+        }
+        if(nt) t+=` ${nt}.`;
+        blocks.push({label:'Villite',txt:t,cls:vilEtio==='VUE'?'warn':'danger',_etio:vilEtio});
+    }
+
+    // corioamnionite
+    if(cor_on){
+        const mir=document.getElementById('cor_mir').value||'non graduata';
+        const fir=document.getElementById('cor_fir').value;
+        const nt=document.getElementById('cor_note').value.trim();
+        let t=`Corioamnionite con risposta materna (MIR) ${mir}`;
+        t+=fir==='assente'?`, senza risposta fetale significativa (FIR assente).`:` e risposta fetale (FIR) ${fir}.`;
+        if(nt) t+=` ${nt}.`;
+        blocks.push({label:'Corioamnionite acuta',txt:t,cls:'danger',_mir:mir,_fir:fir});
+    }
+
+    // calcificazioni
+    let calPat=false;
+    if(cal_on){
+        const e=document.getElementById('cal_e').value;
+        const d=document.getElementById('cal_d').value;
+        const a=document.getElementById('cal_a').value;
+        const nt=document.getElementById('cal_note').value.trim();
+        calPat=e!=='scarse';
+        let t='';
+        if(!calPat){
+            t=`Calcificazioni scarse, ${a}, a distribuzione ${d}: reperto aspecifico, compatibile con la maturazione fisiologica a termine, privo di significato patologico autonomo.`;
+        } else {
+            t=`Calcificazioni ${e}, ${a}, a distribuzione ${d}: reperto aspecifico, superiore all'atteso per EGA; da interpretare nel contesto clinico-ostetrico complessivo, senza valore diagnostico autonomo.`;
+        }
+        if(nt) t+=` ${nt}.`;
+        blocks.push({label:'Calcificazioni',txt:t,cls:calPat?'warn':'ok'});
+    }
+
+    // CHIV
+    if(chiv_on){
+        const ent=document.getElementById('chiv_ent').value;
+        const distr=document.getElementById('chiv_distr').value;
+        const ihc=document.getElementById('chiv_ihc').value;
+        const fib=document.getElementById('chiv_fib').value;
+        const inf=document.getElementById('chiv_inf').value;
+        const nt=document.getElementById('chiv_note').value.trim();
+        let t=`Infiltrato istiocitario nello spazio intervilloso, entità ${ent}, distribuzione ${distr}. IHC: ${ihc}. Componente infettiva: ${inf}. Associazione con fibrina perivillosa: ${fib}.`;
+        t+=` Quadro compatibile con istiocitosi intervillosa cronica (CHIV); la diagnosi definitiva richiede correlazione clinica e, se non eseguita, conferma immunoistochimica (CD68/CD163).`;
+        if(nt) t+=` ${nt}.`;
+        blocks.push({label:'CHIV — Istiocitosi intervillosa cronica',txt:t,cls:'danger'});
+    }
+
+    // MPFD
+    if(mpfd_on){
+        const distr=document.getElementById('mpfd_distr').value;
+        const pMp=document.getElementById('mpfd_pct').value;
+        const intr=document.getElementById('mpfd_intr').value;
+        const conf=document.getElementById('mpfd_conf').value;
+        const nt=document.getElementById('mpfd_note').value.trim();
+        let t=`Fibrina perivillosa massiva a distribuzione ${distr}, con interessamento stimato del ${pMp}% del parenchima esaminato; intrappolamento villare ${intr}. Conferma su campionamento multiplo: ${conf}.`;
+        t+=` Il quadro, se confermato su sezioni rappresentative, sarebbe compatibile con massive perivillous fibrin deposition (MPFD)`;
+        if(distr==='basale (maternal floor)') t+=`, in distribuzione suggestiva per maternal floor infarction`;
+        t+=`.`;
+        if(nt) t+=` ${nt}.`;
+        blocks.push({label:'Fibrina perivillosa massiva (MPFD)',txt:t,cls:'danger'});
+    }
+
+    if(noteE) blocks.push({label:'Ulteriori osservazioni',txt:noteE,cls:'neutral'});
+
+    // ── mvm_has_findings ──
+    const mvm_has_findings=mvm_on&&(
+        document.getElementById('mvm_infarti').checked||
+        document.getElementById('mvm_art').checked||
+        document.getElementById('mvm_ater').checked||
+        document.getElementById('mvm_fib').checked||
+        document.getElementById('mvm_ipo').checked||
+        document.getElementById('mvm_avm').checked||
+        document.getElementById('mvm_nodi').checked||
+        document.getElementById('mvm_note').value.trim()!==''
+    );
+
+    // ── diagnosi sintetica ──
+    let diagI=[];
+    diagI.push(`<div class="diag-item"><strong>Placenta</strong> — EGA ${egaStr}, peso ${peso} g</div>`);
+    const mLab={adeguata:'Maturazione adeguata',intermedia:'Maturazione intermedia',ritardata:'Delayed villous maturation',accelerata:'Accelerated villous maturation',degenerativa:'Alterazioni degenerative'};
+    if(matV&&mLab[matV]) diagI.push(`<div class="diag-item"><strong>Maturazione:</strong> ${mLab[matV]}</div>`);
+    // nodi sinciziali: ora gestiti dalla sezione MVM se mvm_nodi è checkata
+    if(fibr.includes('estesa')) diagI.push(`<div class="diag-item"><strong>Fibrina perivillosa estesa</strong> — da valutare per MPFD su campionamento rappresentativo</div>`);
+    if(mvm_on){
+        const infPd=document.getElementById('mvm_infarti').checked;
+        let mvmItems=[];
+        if(infPd){const e=document.getElementById('inf_est').value,p=document.getElementById('inf_pct').value;mvmItems.push(`Infarti ${e}, ~${p}% parenchima`);}
+        if(document.getElementById('mvm_art').checked) mvmItems.push('arteriopatia deciduale');
+        if(document.getElementById('mvm_ater').checked) mvmItems.push('aterosi acuta');
+        if(document.getElementById('mvm_fib').checked) mvmItems.push('necrosi fibrinoide arterie spirali');
+        if(document.getElementById('mvm_ipo').checked) mvmItems.push('ipoplasia villare distale');
+        if(document.getElementById('mvm_avm').checked) mvmItems.push('accelerated villous maturation');
+        if(document.getElementById('mvm_nodi').checked) mvmItems.push('nodi sinciziali aumentati');
+        if(mvmItems.length>0) diagI.push(`<div class="diag-item"><strong>MVM</strong> — ${mvmItems.join('; ')}</div>`);
+    }
+    if(fvm_on) diagI.push(`<div class="diag-item"><strong>FVM</strong> — ${document.getElementById('fvm_distr').value}</div>`);
+    if(vil_on){const g=document.getElementById('vil_g').value,d=document.getElementById('vil_d').value;diagI.push(`<div class="diag-item"><strong>Villite</strong> ${g} ${d} — ${vilEtio==='VUE'?'quadro compatibile con VUE':'morfologia non escludente eziologia infettiva'}</div>`);}
+    if(cor_on){const mir=document.getElementById('cor_mir').value||'n.g.',fir=document.getElementById('cor_fir').value;diagI.push(`<div class="diag-item"><strong>Corioamnionite acuta</strong> — MIR ${mir}; FIR ${fir}</div>`);}
+    if(cal_on&&calPat) diagI.push(`<div class="diag-item"><strong>Calcificazioni</strong> ${document.getElementById('cal_e').value}</div>`);
+    if(chiv_on) diagI.push(`<div class="diag-item"><strong>CHIV</strong> — da confermare IHC se non eseguita</div>`);
+    if(mpfd_on) diagI.push(`<div class="diag-item"><strong>Fibrina perivillosa massiva</strong> — compatibile con MPFD se confermato</div>`);
+
+    document.getElementById('diag').innerHTML=`<div class="diag-title">Diagnosi istologica sintetica (Amsterdam/Redline)</div>`+diagI.join('');
+
+    // ── body referto ──
+    let bodyH='';
+    bodyH+=`<div class="rb"><div class="rl">Macroscopico</div>${macroTxt}</div>`;
+    bodyH+=`<div class="rb neutral"><div class="rl">Campionamento</div>${campTxt}</div>`;
+    if(pilTxt.trim()) bodyH+=`<div class="rb"><div class="rl">Reperto microscopico — pilastri</div>${pilTxt.trim()}</div>`;
+    const noLes=!mvm_has_findings&&!fvm_on&&!vil_on&&!cor_on&&!chiv_on&&!mpfd_on&&!noteE&&(!cal_on||!calPat);
+    if(noLes){
+        bodyH+=`<div class="rb ok"><div class="rl">Lesioni patologiche</div>Nei campioni esaminati non si documentano infarti, villite, calcificazioni di rilievo patologico, corioamnionite o altre lesioni morfologicamente significative.</div>`;
+    } else {
+        blocks.forEach(b=>{bodyH+=`<div class="rb ${b.cls||''}"><div class="rl">${b.label}</div>${b.txt}</div>`;});
+    }
+    document.getElementById('body').innerHTML=bodyH;
+
+    // ── commento ──
+    const nLes=(mvm_has_findings?1:0)+(fvm_on?1:0)+(vil_on?1:0)+(cor_on?1:0)+(chiv_on?1:0)+(mpfd_on?1:0)+(calPat?1:0);
+    let comm='';
+    const cbw=document.getElementById('cb_wrap');
+    cbw.className='cb';
+
+    if(cor_on){
+        const fir=document.getElementById('cor_fir').value;
+        const mir=document.getElementById('cor_mir').value||'';
+        if(fir.includes('Grado 3')){
+            cbw.className='cb danger';
+            comm=`Reperto morfologico di rilievo clinico: funisite necrotizzante (FIR Grado 3). Il dato va comunicato tempestivamente al clinico per la correlazione con il quadro neonatale. La gestione terapeutica (antibioticoterapia, monitoraggio infettivologico) resta di competenza neonatologica.`;
+        } else {
+            comm=`Corioamnionite ${mir}${fir!=='assente'?`, risposta fetale ${fir}`:', senza risposta fetale apprezzabile'}: il reperto va correlato con il quadro clinico materno (febbre, leucocitosi, rottura prematura delle membrane) e comunicato al team clinico per la valutazione neonatologica.`;
+        }
+    } else if(noLes&&(matV==='adeguata'||!matV)&&egaIst==='compatibile'){
+        cbw.className='cb ok';
+        comm=`Nei campioni esaminati non si osservano alterazioni morfologiche significative. Il reperto è compatibile con le caratteristiche istologiche attese per EGA. La valutazione si limita al materiale campionato.`;
+    } else if(!mvm_has_findings&&!fvm_on&&!vil_on&&!cor_on&&cal_on&&!calPat&&!chiv_on&&!mpfd_on){
+        cbw.className='cb ok';
+        comm=`Calcificazioni scarse, reperto fisiologico a termine. Nei campioni esaminati non si rilevano altre alterazioni morfologicamente significative.`;
+    } else if(mvm_has_findings&&!vil_on&&!cor_on&&!fvm_on&&!chiv_on&&!mpfd_on){
+        const infP=document.getElementById('mvm_infarti').checked;
+        const hasVascularMVM=
+            document.getElementById('mvm_art').checked||
+            document.getElementById('mvm_ater').checked||
+            document.getElementById('mvm_fib').checked||
+            document.getElementById('mvm_ipo').checked||
+            document.getElementById('mvm_avm').checked||
+            document.getElementById('mvm_nodi').checked;
+        if(infP){
+            const ctx=document.getElementById('inf_ctx').value;
+            const pp=parseInt(document.getElementById('inf_pct').value)||0;
+            const ee=document.getElementById('inf_est').value;
+            if(ctx.includes('termine')&&pp<=10&&ee.includes('focale')){
+                comm=`Infarti periferici e focali a termine: reperto di moderata rilevanza clinica, non infrequente a EGA avanzata. Correlare con dati clinico-ostetrici. La valutazione di un eventuale workup per trombofilia materna o patologia vascolare spirale è di pertinenza ostetrica, da calibrare sul contesto clinico.`;
             } else {
-                alert_div.className = 'alert-box alert-ok';
-                alert_div.innerHTML = '✓ Normale (15-30 mm)';
+                comm=`Il quadro morfologico, con infarti placentari e/o ulteriori lesioni MVM, orienta verso maternal vascular malperfusion. Il dato va correlato con il contesto clinico ostetrico (IUGR, ipertensione, storia di perdite). La valutazione del workup (trombofilia, antifosfolipidi) è di pertinenza clinica, se indicata.`;
             }
+        } else if(hasVascularMVM){
+            comm=`Il quadro morfologico mostra lesioni compatibili con il pattern di maternal vascular malperfusion, in assenza di infarti placentari. Il dato va correlato con il contesto clinico ostetrico (IUGR, ipertensione, preeclampsia, storia di perdite). La valutazione di eventuali approfondimenti è di pertinenza clinica.`;
+        } else {
+            comm=`È stata selezionata la categoria MVM, ma non risultano specificate lesioni morfologiche. Verificare la selezione prima di finalizzare il referto.`;
         }
-
-        const PESO_ATTESO = {16:100,18:125,20:170,22:200,24:225,26:255,28:285,30:315,32:355,34:385,36:415,37:430,38:445,39:460,40:470,41:480,42:490};
-        function getPesoAtteso(ega) {
-            if (PESO_ATTESO[ega]) return PESO_ATTESO[ega];
-            const keys = Object.keys(PESO_ATTESO).map(Number).sort((a,b) => a-b);
-            for (let i = 0; i < keys.length - 1; i++) {
-                if (ega >= keys[i] && ega <= keys[i+1]) {
-                    const r = (ega - keys[i]) / (keys[i+1] - keys[i]);
-                    return Math.round(PESO_ATTESO[keys[i]] + r * (PESO_ATTESO[keys[i+1]] - PESO_ATTESO[keys[i]]));
-                }
-            }
-            return Math.round(ega * 15 - 200);
+    } else if(!mvm_on&&vil_on&&!cor_on&&!fvm_on){
+        if(vilEtio==='VUE'){
+            comm=`Quadro compatibile con VUE, in assenza di criteri morfologici o clinici per eziologia infettiva: non richiede workup infettivo urgente sulla base del solo reperto morfologico. Correlare con anamnesi materna (patologie autoimmuni, perdite ricorrenti). Il rischio di ricorrenza stimato in letteratura per VUE severa/multifocale si attesta intorno al 10–15%; la valutazione prognostica spetta al team ostetrico.`;
+        } else {
+            cbw.className='cb danger';
+            comm=`Villite con morfologia non escludente eziologia infettiva: il reperto va comunicato al clinico di riferimento per la correlazione con dati sierologici materni (CMV, Toxoplasma, Treponema e altri agenti in base al quadro clinico). La gestione diagnostico-terapeutica neonatale rimane di competenza del team clinico.`;
         }
+    } else if(fvm_on&&!cor_on){
+        cbw.className='cb danger';
+        comm=`Lesioni compatibili con FVM: il dato va correlato con il quadro clinico fetale/neonatale e con le caratteristiche del cordone ombelicale (inserzione, lunghezza, coiling index). La valutazione prognostica e l'eventuale approfondimento (eziologia della trombosi, emostasi fetale) sono di pertinenza clinica.`;
+    } else if(chiv_on||mpfd_on){
+        cbw.className='cb danger';
+        comm=`Lesioni rare con implicazioni prognostiche e di ricorrenza: CHIV e/o MPFD si associano a perdite ricorrenti e outcome perinatale sfavorevole. Il reperto, se confermato su campionamento completo e IHC, va comunicato al team ostetrico per counseling adeguato. Non esistono strategie preventive universalmente validate; eventuali approcci nelle gravidanze successive (immunomodulanti, antitrombotici) sono di pertinenza ostetrico-materno-fetale.`;
+    } else if(nLes>=2){
+        cbw.className='cb danger';
+        comm=`Reperto con alterazioni morfologiche multiple: il quadro complessivo richiede comunicazione al team clinico (ostetricia, neonatologia) per correlazione con il contesto perinatale. La tipologia e l'entità degli accertamenti di secondo livello sono di pertinenza clinica, da calibrare sul quadro specifico.`;
+    } else {
+        comm=`Reperto da correlare con il contesto clinico-ostetrico. Si rimanda alla descrizione morfologica per i dettagli. La valutazione prognostica e l'eventuale workup sono di pertinenza del team clinico.`;
+    }
 
-        function checkPeso() {
-            const ega = parseInt(document.getElementById('ega_clinica_sett').value);
-            const peso = parseInt(document.getElementById('peso_placenta').value);
-            const pesoAtteso = getPesoAtteso(ega);
-            const percentuale = Math.round((peso / pesoAtteso) * 100);
-            const alert_div = document.getElementById('peso_alert');
+    document.getElementById('commento').innerHTML=comm;
+    document.getElementById('result').classList.add('active');
+    document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
+    checkPeso();checkSpess();checkCord();
+} catch(e){alert('Errore: '+e.message);console.error(e);}
+}
 
-            if (percentuale < 80) {
-                alert_div.className = 'alert-box alert-danger';
-                alert_div.innerHTML = `🔴 Ridotto - ${percentuale}% del peso atteso (${pesoAtteso}g)`;
-            } else if (percentuale > 120) {
-                alert_div.className = 'alert-box alert-warn';
-                alert_div.innerHTML = `⚠️ Aumentato - ${percentuale}% del peso atteso (${pesoAtteso}g)`;
-            } else {
-                alert_div.className = 'alert-box alert-ok';
-                alert_div.innerHTML = `✓ Normale - ${percentuale}% del peso atteso (${pesoAtteso}g)`;
-            }
-        }
+function copiaRef(){
+    const d=document.getElementById('diag').innerText;
+    const b=document.getElementById('body').innerText;
+    const c=document.getElementById('commento').innerText;
+    const t=`REFERTO ISTOLOGICO — PLACENTA\n\nDIAGNOSI SINTETICA (Amsterdam/Redline):\n${d}\n\nDESCRIZIONE MORFOLOGICA:\n${b}\n\nCOMMENTO CLINICO-PATOLOGICO:\n${c}`;
+    navigator.clipboard.writeText(t).then(()=>{
+        const btn=event.target;btn.textContent='✓ Copiato!';
+        setTimeout(()=>{btn.textContent='📋 Copia referto (testo)';},2000);
+    });
+}
 
-        function checkCordone() {
-            const cordone = parseInt(document.getElementById('lunghezza_cordone').value);
-            const alert_div = document.getElementById('cordone_alert');
-            
-            if (cordone < 30) {
-                alert_div.className = 'alert-box alert-danger';
-                alert_div.innerHTML = '🔴 Corto - Rischio compressione/avvolgimento';
-            } else if (cordone > 80) {
-                alert_div.className = 'alert-box alert-warn';
-                alert_div.innerHTML = '⚠️ Lungo - Rischio annodamento/volvolo';
-            } else {
-                alert_div.className = 'alert-box alert-ok';
-                alert_div.innerHTML = '✓ Normale (30-80 cm)';
-            }
-        }
-
-        function toggleInfarti() {
-            document.getElementById('infarti_dettagli').classList.toggle('active');
-        }
-
-        function toggleVillite() {
-            document.getElementById('villite_dettagli').classList.toggle('active');
-        }
-
-        function toggleCalcif() {
-            document.getElementById('calcif_dettagli').classList.toggle('active');
-        }
-
-        function toggleCorio() {
-            document.getElementById('corio_dettagli').classList.toggle('active');
-        }
-
-        function checkVasiCordone() {
-            const vasi = document.getElementById('vasi_cordone').value;
-            const alert_div = document.getElementById('vasi_cordone_alert');
-            if (vasi === '2') {
-                alert_div.className = 'alert-box alert-warn';
-                alert_div.innerHTML = '⚠️ Arteria ombelicale singola — correlare con ecografia fetale, escludere anomalie cromosomiche';
-            } else {
-                alert_div.className = '';
-                alert_div.innerHTML = '';
-            }
-        }
-
-        function genera_referto() {
-            try {
-                const ega_clinica = parseInt(document.getElementById('ega_clinica_sett').value);
-                const peso_placenta = document.getElementById('peso_placenta').value;
-                const spessore = document.getElementById('spessore').value;
-                const lunghezza_cordone = document.getElementById('lunghezza_cordone').value;
-                const aspetto_fetale = document.getElementById('aspetto_fetale').value;
-                const colore_placenta = document.getElementById('colore_placenta').value;
-                const aspetto_cordone = document.getElementById('aspetto_cordone').value;
-                const inserzione_cordone = document.getElementById('inserzione_cordone').value;
-                const vasi_cordone = document.getElementById('vasi_cordone').value;
-
-                const ega_istologia = document.getElementById('ega_istologia').value;
-                const villi_stato = document.getElementById('villi_stato').value;
-
-                // MACROSCOPICO
-                const vasi_label = vasi_cordone === '2' ? '2 vasi (arteria ombelicale singola)' : '3 vasi';
-                document.getElementById('macro_output').innerHTML = `
-                    <strong>EGA:</strong> ${ega_clinica} settimane<br>
-                    <strong>Peso:</strong> ${peso_placenta}g<br>
-                    <strong>Spessore:</strong> ${spessore} mm<br>
-                    <strong>Superficie fetale:</strong> ${aspetto_fetale}<br>
-                    <strong>Colore:</strong> ${colore_placenta}<br>
-                    <strong>Cordone:</strong> ${aspetto_cordone} • Inserzione: ${inserzione_cordone} • ${vasi_label} • Lunghezza: ${lunghezza_cordone} cm
-                `;
-
-                // PILASTRI
-                let pilastri_html = '';
-                if (ega_istologia === 'compatibile') {
-                    pilastri_html += `<strong>✓ ETA' GESTAZIONALE:</strong> <span class="status-yes">Compatibile</span> (${ega_clinica} sett.)<br>`;
-                } else if (ega_istologia === 'precoce') {
-                    pilastri_html += `<strong>⚠ ETA' GESTAZIONALE:</strong> <span class="status-partial">Più precoce</span> di quella indicata<br>`;
-                } else if (ega_istologia === 'tardiva') {
-                    pilastri_html += `<strong>⚠ ETA' GESTAZIONALE:</strong> <span class="status-partial">Più tardiva</span> di quella indicata<br>`;
-                }
-
-                if (villi_stato === 'maturi') {
-                    pilastri_html += `<strong>✓ VILLI CORIALI:</strong> <span class="status-yes">Maturi</span> - sincizio sottile, fenestrazioni presenti`;
-                } else if (villi_stato === 'intermedi') {
-                    pilastri_html += `<strong>⚠ VILLI CORIALI:</strong> <span class="status-partial">Intermedi</span> - maturazione parziale`;
-                } else if (villi_stato === 'immaturi') {
-                    pilastri_html += `<strong>✗ VILLI CORIALI:</strong> <span class="status-no">Immaturi</span> - ANOMALO per EGA ${ega_clinica} sett.`;
-                } else if (villi_stato === 'degenerativi') {
-                    pilastri_html += `<strong>✗ VILLI CORIALI:</strong> <span class="status-no">Degenerativi</span> - Edema, danno sinciziale`;
-                }
-
-                document.getElementById('pilastri_output').innerHTML = pilastri_html;
-
-                // INFARTI
-                let infarti_presente = document.getElementById('infarti_presenti').checked;
-                if (infarti_presente) {
-                    const estensione = document.getElementById('infarti_estensione').value;
-                    const localizzazione = document.getElementById('infarti_localizzazione').value;
-                    const percentuale = document.getElementById('infarti_percentuale').value;
-                    const note = document.getElementById('infarti_note').value;
-                    document.getElementById('infarti_output').innerHTML = `<span class="status-no">PRESENTI</span><br><strong>Estensione:</strong> ${estensione} • <strong>Localizzazione:</strong> ${localizzazione} • <strong>% parenchima:</strong> ~${percentuale}%${note ? '<br><strong>Note:</strong> ' + note : ''}`;
-                } else {
-                    document.getElementById('infarti_output').innerHTML = `<span class="status-yes">Assenti</span>`;
-                }
-
-                // VILLITE
-                let villite_presente = document.getElementById('villite_presenti').checked;
-                let villite_eziologia = '';
-                if (villite_presente) {
-                    const grado = document.getElementById('villite_grado').value;
-                    const distribuzione = document.getElementById('villite_distribuzione').value;
-                    villite_eziologia = document.getElementById('villite_eziologia').value;
-                    const tipo = document.getElementById('villite_tipo').value;
-                    const note = document.getElementById('villite_note').value;
-                    document.getElementById('villite_output').innerHTML = `<span class="status-no">PRESENTE</span><br><strong>Eziologia:</strong> ${villite_eziologia} • <strong>Grado:</strong> ${grado} • <strong>Distribuzione:</strong> ${distribuzione} • <strong>Infiltrato:</strong> ${tipo}${note ? '<br><strong>Interpretazione:</strong> ' + note : ''}`;
-                } else {
-                    document.getElementById('villite_output').innerHTML = `<span class="status-yes">Assente</span>`;
-                }
-
-                // CALCIFICAZIONI
-                let calcif_presente = document.getElementById('calcif_presenti').checked;
-                let calcif_patologica = false;
-                if (calcif_presente) {
-                    const distribuzione = document.getElementById('calcif_distribuzione').value;
-                    const stadio = document.getElementById('calcif_stadio').value;
-                    const aspetto = document.getElementById('calcif_aspetto').value;
-                    const note = document.getElementById('calcif_note').value;
-                    calcif_patologica = (stadio !== 'Scarsa');
-                    const status = stadio === 'Scarsa' ? 'status-yes' : 'status-partial';
-                    const label = stadio === 'Scarsa' ? 'SCARSE (fisiologiche)' : 'PRESENTI';
-                    document.getElementById('calcif_output').innerHTML = `<span class="${status}">${label}</span><br><strong>Distribuzione:</strong> ${distribuzione} • <strong>Stadio:</strong> ${stadio} • <strong>Aspetto:</strong> ${aspetto}${note ? '<br><strong>Interpretazione:</strong> ' + note : ''}`;
-                } else {
-                    document.getElementById('calcif_output').innerHTML = `<span class="status-yes">Assenti</span>`;
-                }
-
-                // CORIOAMNIONITE
-                let corio_presente = document.getElementById('corio_presente').checked;
-                if (corio_presente) {
-                    const mir = document.getElementById('corio_mir').value;
-                    const fir = document.getElementById('corio_fir').value;
-                    const note = document.getElementById('corio_note').value;
-                    document.getElementById('corio_output').innerHTML = `<span class="status-no">PRESENTE</span><br><strong>MIR:</strong> ${mir} • <strong>FIR:</strong> ${fir}${note ? '<br><strong>Note:</strong> ' + note : ''}`;
-                    document.getElementById('corio_result').style.display = 'block';
-                } else {
-                    document.getElementById('corio_output').innerHTML = `<span class="status-yes">Assente</span>`;
-                    document.getElementById('corio_result').style.display = 'block';
-                }
-
-                // NOTE AGGIUNTIVE
-                const note_aggiuntive = document.getElementById('note_aggiuntive').value;
-                if (note_aggiuntive) {
-                    document.getElementById('note_aggiuntive_result').style.display = 'block';
-                    document.getElementById('note_aggiuntive_output').innerHTML = note_aggiuntive;
-                } else {
-                    document.getElementById('note_aggiuntive_result').style.display = 'none';
-                }
-
-                // CONCLUSIONE SEMPLIFICATA
-                let conclusione = '';
-                const no_lesioni = !infarti_presente && !villite_presente && !calcif_presente && !corio_presente;
-                const solo_calcif_scarsa = !infarti_presente && !villite_presente && calcif_presente && !calcif_patologica && !corio_presente;
-
-                if (corio_presente) {
-                    const mir = document.getElementById('corio_mir').value;
-                    const fir = document.getElementById('corio_fir').value;
-                    const fir_severa = fir === 'FIR 3';
-                    if (fir_severa) {
-                        conclusione = `<strong>URGENTE — Corioamnionite con risposta fetale severa (${fir}).</strong> Funisite necrotizzante: alto rischio di sepsi neonatale e danno neurologico. Workup neonatale urgente: emocolture, PCR, proteina C reattiva. Antibioticoterapia neonatale empirica da valutare. Correlazione urgente con neonatologia.`;
-                    } else {
-                        conclusione = `<strong>Corioamnionite ${mir}${fir !== 'Nessuna' ? ', ' + fir : ' senza risposta fetale'}.</strong> Correlare con quadro clinico materno (febbre, leucocitosi). Workup neonatale: emocolture, PCR se FIR presente. Antibioticoterapia neonatale da valutare in base alla clinica.`;
-                    }
-                } else if (no_lesioni && villi_stato === 'maturi' && ega_istologia === 'compatibile') {
-                    conclusione = `Esame istologico senza alterazioni significative. Struttura e maturazione placentare pienamente compatibile con EGA clinica di ${ega_clinica} settimane. Villi maturi, assenza di lesioni patologiche, adeguata funzione placentare. Follow-up ostetrico standard.`;
-                } else if (solo_calcif_scarsa && villi_stato === 'maturi') {
-                    conclusione = `Calcificazioni scarse, completamente fisiologiche a termine. Marker di maturazione placentare normale. Nessun significato patologico. Follow-up clinico standard.`;
-                } else if (infarti_presente && !villite_presente && !calcif_patologica) {
-                    conclusione = `<strong>Insufficienza placentare cronica con infarti placentari.</strong> Workup consigliato: screening trombofilgia materna (fattore V Leiden, G20210A, proteina C/S), anticorpi antifosfolipidi, counseling ostetrico per gestioni future. Correlazione urgente con clinica ostetrica (pressione, oligoidramnios, ecografia).`;
-                } else if (!infarti_presente && villite_presente && !calcif_patologica) {
-                    if (villite_eziologia === 'Infettiva') {
-                        conclusione = `<strong>URGENTE — Villite con sospetto infettivo.</strong> Workup STAT: sierologia materna (CMV, toxoplasma, sifilide, listeria, varicella, parvovirus B19), PCR su liquido amniotico/liquor neonatale se indicato. Follow-up pediatrico multidisciplinare urgente (neurologia, audiologia, oftalmologia). Alto rischio di sequele neonatali.`;
-                    } else {
-                        conclusione = `<strong>Villite di Eziologia Sconosciuta (VUE).</strong> Pattern immunomediato materno-fetale, non richiede workup infettivo urgente. Counseling: rischio di ricorrenza 10-15% nelle gravidanze successive. Correlazione con storia materna (patologie autoimmuni, perdite ricorrenti). Follow-up ostetrico nelle gravidanze future.`;
-                    }
-                } else if (!infarti_presente && !villite_presente && calcif_patologica) {
-                    conclusione = `Calcificazioni patologiche suggestive di stress placentare cronico. Workup: escludere preeclampsia, ipertensione, IUGR. Screening trombofilgia se preeclampsia ricorrente. Counseling su rischio ricorrenza in gravidanze future.`;
-                } else {
-                    conclusione = `<strong>Alterazioni patologiche multiple significative.</strong> Danno placentare severo da meccanismi multipli. URGENTE: workup completo per infezione congenita, trombofilgia materna, anticorpi antifosfolipidi. Follow-up pediatrico multidisciplinare urgente. Alto rischio outcome perinatale sfavorevole.`;
-                }
-
-                document.getElementById('conclusione').innerHTML = conclusione;
-                document.getElementById('result').classList.add('active');
-                document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-                checkSpessore();
-                checkPeso();
-                checkCordone();
-            } catch (error) {
-                alert('Errore: ' + error.message);
-                console.error(error);
-            }
-        }
-    </script>
+function nuovoCaso(){
+    if(!confirm('Azzerare tutti i campi e nascondere il referto?')) return;
+    document.getElementById('pForm').reset();
+    // chiudi tutti i pannelli lesione
+    document.querySelectorAll('.ld').forEach(el=>el.classList.remove('active'));
+    // deseleziona tutti i checkbox
+    document.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.checked=false);
+    // nascondi risultato
+    document.getElementById('result').classList.remove('active');
+    // ricalcola alert
+    checkPeso(); checkSpess(); checkCord();
+    // svuota alerts vasi
+    document.getElementById('va').className=''; document.getElementById('va').innerHTML='';
+    window.scrollTo({top:0,behavior:'smooth'});
+}
+window.onload=()=>{checkPeso();checkSpess();checkCord();};
+</script>
 </body>
 </html>
