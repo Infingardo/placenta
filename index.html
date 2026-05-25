@@ -374,8 +374,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🫀 Esame Istologico della Placenta</h1>
-            <p>Macroscopico • Pilastri • Lesioni • Conclusioni specifiche</p>
+            <h1>🔬 Esame Istologico della Placenta</h1>
+            <p>Macroscopico • Cordone • Pilastri • Lesioni • Conclusioni specifiche</p>
         </div>
         
         <div class="content">
@@ -444,11 +444,32 @@
                             <label>Aspetto cordone ombelicale</label>
                             <select id="aspetto_cordone" required>
                                 <option value="">Seleziona...</option>
-                                <option value="Normale (turgido, 3 vasi)">Normale (turgido, 3 vasi)</option>
-                                <option value="Villoso">Villoso</option>
+                                <option value="Normale (turgido)">Normale (turgido)</option>
+                                <option value="Sottile/ipoplasico">Sottile / ipoplasico</option>
                                 <option value="Edematoso">Edematoso</option>
                                 <option value="Con trombosi">Con trombosi</option>
+                                <option value="Con amnios nodosum">Con amnios nodosum</option>
                             </select>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <div class="field">
+                            <label>Inserzione cordone</label>
+                            <select id="inserzione_cordone">
+                                <option value="Centrale">Centrale</option>
+                                <option value="Eccentrica">Eccentrica</option>
+                                <option value="Marginale (a racchetta)">Marginale (a racchetta)</option>
+                                <option value="Velamentosa">Velamentosa</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>Numero vasi cordone</label>
+                            <select id="vasi_cordone" onchange="checkVasiCordone()">
+                                <option value="3">3 vasi (normale)</option>
+                                <option value="2">2 vasi (arteria ombelicale singola)</option>
+                            </select>
+                            <div id="vasi_cordone_alert"></div>
                         </div>
                     </div>
                 </div>
@@ -558,6 +579,15 @@
                         </div>
                         <div class="field-group full">
                             <div class="field">
+                                <label>Eziologia</label>
+                                <select id="villite_eziologia">
+                                    <option value="VUE">VUE — Villite di Eziologia Sconosciuta</option>
+                                    <option value="Infettiva">Sospetta infettiva</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field-group full">
+                            <div class="field">
                                 <label>Tipo infiltrato</label>
                                 <select id="villite_tipo">
                                     <option value="Non specifico">Non specifico</option>
@@ -626,6 +656,45 @@
                     </div>
                 </div>
 
+                <!-- CORIOAMNIONITE -->
+                <div class="section">
+                    <div class="section-title">🟠 Lesione 4: Corioamnionite</div>
+                    <div class="lesion-toggle">
+                        <input type="checkbox" id="corio_presente" onchange="toggleCorio()">
+                        <label for="corio_presente"><strong>Corioamnionite presente</strong></label>
+                    </div>
+
+                    <div id="corio_dettagli" class="lesion-section">
+                        <div class="field-group">
+                            <div class="field">
+                                <label>Risposta materna (MIR) — Criteri Amsterdam</label>
+                                <select id="corio_mir">
+                                    <option value="">Seleziona...</option>
+                                    <option value="MIR 1">Grado 1 — Subamniotica</option>
+                                    <option value="MIR 2">Grado 2 — Corionica</option>
+                                    <option value="MIR 3">Grado 3 — Necrotizzante</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label>Risposta fetale (FIR) — Criteri Amsterdam</label>
+                                <select id="corio_fir">
+                                    <option value="">Seleziona...</option>
+                                    <option value="Nessuna">Nessuna risposta fetale</option>
+                                    <option value="FIR 1">Grado 1 — Flebite/arterite ombelicale</option>
+                                    <option value="FIR 2">Grado 2 — Vasculite corionica</option>
+                                    <option value="FIR 3">Grado 3 — Funisite necrotizzante</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field-group full">
+                            <div class="field">
+                                <label>Note</label>
+                                <textarea id="corio_note" placeholder="Es. Infiltrato granulocitario subamniotico con early FIR..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- NOTE AGGIUNTIVE -->
                 <div class="section">
                     <div class="section-title">📝 Note Aggiuntive</div>
@@ -673,6 +742,11 @@
                     <div class="result-content" id="calcif_output"></div>
                 </div>
 
+                <div class="result-section" id="corio_result" style="display: none;">
+                    <div class="result-section-title">🟠 Corioamnionite</div>
+                    <div class="result-content" id="corio_output"></div>
+                </div>
+
                 <div class="result-section" id="note_aggiuntive_result" style="display: none;">
                     <div class="result-section-title">Altre Osservazioni</div>
                     <div class="result-content" id="note_aggiuntive_output"></div>
@@ -697,35 +771,48 @@
         function checkSpessore() {
             const spessore = parseInt(document.getElementById('spessore').value);
             const alert_div = document.getElementById('spessore_alert');
-            
-            if (spessore < 10) {
+
+            if (spessore < 15) {
                 alert_div.className = 'alert-box alert-danger';
-                alert_div.innerHTML = '🔴 Atrofia - Possibile insufficienza placentare';
+                alert_div.innerHTML = '🔴 Sottile/atrofica - Possibile insufficienza placentare';
             } else if (spessore > 30) {
                 alert_div.className = 'alert-box alert-warn';
-                alert_div.innerHTML = '⚠️ Edema - Possibile sofferenza placentare';
+                alert_div.innerHTML = '⚠️ Aumentata - Possibile edema/idrope';
             } else {
                 alert_div.className = 'alert-box alert-ok';
-                alert_div.innerHTML = '✓ Normale (10-30 mm)';
+                alert_div.innerHTML = '✓ Normale (15-30 mm)';
             }
+        }
+
+        const PESO_ATTESO = {16:100,18:125,20:170,22:200,24:225,26:255,28:285,30:315,32:355,34:385,36:415,37:430,38:445,39:460,40:470,41:480,42:490};
+        function getPesoAtteso(ega) {
+            if (PESO_ATTESO[ega]) return PESO_ATTESO[ega];
+            const keys = Object.keys(PESO_ATTESO).map(Number).sort((a,b) => a-b);
+            for (let i = 0; i < keys.length - 1; i++) {
+                if (ega >= keys[i] && ega <= keys[i+1]) {
+                    const r = (ega - keys[i]) / (keys[i+1] - keys[i]);
+                    return Math.round(PESO_ATTESO[keys[i]] + r * (PESO_ATTESO[keys[i+1]] - PESO_ATTESO[keys[i]]));
+                }
+            }
+            return Math.round(ega * 15 - 200);
         }
 
         function checkPeso() {
             const ega = parseInt(document.getElementById('ega_clinica_sett').value);
             const peso = parseInt(document.getElementById('peso_placenta').value);
-            const pesoAtteso = ega * 15 - 200;
+            const pesoAtteso = getPesoAtteso(ega);
             const percentuale = Math.round((peso / pesoAtteso) * 100);
             const alert_div = document.getElementById('peso_alert');
-            
+
             if (percentuale < 80) {
                 alert_div.className = 'alert-box alert-danger';
-                alert_div.innerHTML = `🔴 Ridotto - ${percentuale}% peso atteso (${pesoAtteso}g)`;
+                alert_div.innerHTML = `🔴 Ridotto - ${percentuale}% del peso atteso (${pesoAtteso}g)`;
             } else if (percentuale > 120) {
                 alert_div.className = 'alert-box alert-warn';
-                alert_div.innerHTML = `⚠️ Aumentato - ${percentuale}% peso atteso (${pesoAtteso}g)`;
+                alert_div.innerHTML = `⚠️ Aumentato - ${percentuale}% del peso atteso (${pesoAtteso}g)`;
             } else {
                 alert_div.className = 'alert-box alert-ok';
-                alert_div.innerHTML = `✓ Normale - ${percentuale}% peso atteso (${pesoAtteso}g)`;
+                alert_div.innerHTML = `✓ Normale - ${percentuale}% del peso atteso (${pesoAtteso}g)`;
             }
         }
 
@@ -757,6 +844,22 @@
             document.getElementById('calcif_dettagli').classList.toggle('active');
         }
 
+        function toggleCorio() {
+            document.getElementById('corio_dettagli').classList.toggle('active');
+        }
+
+        function checkVasiCordone() {
+            const vasi = document.getElementById('vasi_cordone').value;
+            const alert_div = document.getElementById('vasi_cordone_alert');
+            if (vasi === '2') {
+                alert_div.className = 'alert-box alert-warn';
+                alert_div.innerHTML = '⚠️ Arteria ombelicale singola — correlare con ecografia fetale, escludere anomalie cromosomiche';
+            } else {
+                alert_div.className = '';
+                alert_div.innerHTML = '';
+            }
+        }
+
         function genera_referto() {
             try {
                 const ega_clinica = parseInt(document.getElementById('ega_clinica_sett').value);
@@ -766,19 +869,21 @@
                 const aspetto_fetale = document.getElementById('aspetto_fetale').value;
                 const colore_placenta = document.getElementById('colore_placenta').value;
                 const aspetto_cordone = document.getElementById('aspetto_cordone').value;
+                const inserzione_cordone = document.getElementById('inserzione_cordone').value;
+                const vasi_cordone = document.getElementById('vasi_cordone').value;
 
                 const ega_istologia = document.getElementById('ega_istologia').value;
                 const villi_stato = document.getElementById('villi_stato').value;
 
                 // MACROSCOPICO
+                const vasi_label = vasi_cordone === '2' ? '2 vasi (arteria ombelicale singola)' : '3 vasi';
                 document.getElementById('macro_output').innerHTML = `
                     <strong>EGA:</strong> ${ega_clinica} settimane<br>
                     <strong>Peso:</strong> ${peso_placenta}g<br>
                     <strong>Spessore:</strong> ${spessore} mm<br>
-                    <strong>Lunghezza cordone:</strong> ${lunghezza_cordone} cm<br>
                     <strong>Superficie fetale:</strong> ${aspetto_fetale}<br>
                     <strong>Colore:</strong> ${colore_placenta}<br>
-                    <strong>Cordone ombelicale:</strong> ${aspetto_cordone}
+                    <strong>Cordone:</strong> ${aspetto_cordone} • Inserzione: ${inserzione_cordone} • ${vasi_label} • Lunghezza: ${lunghezza_cordone} cm
                 `;
 
                 // PILASTRI
@@ -817,12 +922,14 @@
 
                 // VILLITE
                 let villite_presente = document.getElementById('villite_presenti').checked;
+                let villite_eziologia = '';
                 if (villite_presente) {
                     const grado = document.getElementById('villite_grado').value;
                     const distribuzione = document.getElementById('villite_distribuzione').value;
+                    villite_eziologia = document.getElementById('villite_eziologia').value;
                     const tipo = document.getElementById('villite_tipo').value;
                     const note = document.getElementById('villite_note').value;
-                    document.getElementById('villite_output').innerHTML = `<span class="status-no">PRESENTE</span><br><strong>Grado:</strong> ${grado} • <strong>Distribuzione:</strong> ${distribuzione} • <strong>Infiltrato:</strong> ${tipo}${note ? '<br><strong>Interpretazione:</strong> ' + note : ''}`;
+                    document.getElementById('villite_output').innerHTML = `<span class="status-no">PRESENTE</span><br><strong>Eziologia:</strong> ${villite_eziologia} • <strong>Grado:</strong> ${grado} • <strong>Distribuzione:</strong> ${distribuzione} • <strong>Infiltrato:</strong> ${tipo}${note ? '<br><strong>Interpretazione:</strong> ' + note : ''}`;
                 } else {
                     document.getElementById('villite_output').innerHTML = `<span class="status-yes">Assente</span>`;
                 }
@@ -843,6 +950,19 @@
                     document.getElementById('calcif_output').innerHTML = `<span class="status-yes">Assenti</span>`;
                 }
 
+                // CORIOAMNIONITE
+                let corio_presente = document.getElementById('corio_presente').checked;
+                if (corio_presente) {
+                    const mir = document.getElementById('corio_mir').value;
+                    const fir = document.getElementById('corio_fir').value;
+                    const note = document.getElementById('corio_note').value;
+                    document.getElementById('corio_output').innerHTML = `<span class="status-no">PRESENTE</span><br><strong>MIR:</strong> ${mir} • <strong>FIR:</strong> ${fir}${note ? '<br><strong>Note:</strong> ' + note : ''}`;
+                    document.getElementById('corio_result').style.display = 'block';
+                } else {
+                    document.getElementById('corio_output').innerHTML = `<span class="status-yes">Assente</span>`;
+                    document.getElementById('corio_result').style.display = 'block';
+                }
+
                 // NOTE AGGIUNTIVE
                 const note_aggiuntive = document.getElementById('note_aggiuntive').value;
                 if (note_aggiuntive) {
@@ -854,17 +974,30 @@
 
                 // CONCLUSIONE SEMPLIFICATA
                 let conclusione = '';
-                const no_lesioni = !infarti_presente && !villite_presente && !calcif_presente;
-                const solo_calcif_scarsa = !infarti_presente && !villite_presente && calcif_presente && !calcif_patologica;
+                const no_lesioni = !infarti_presente && !villite_presente && !calcif_presente && !corio_presente;
+                const solo_calcif_scarsa = !infarti_presente && !villite_presente && calcif_presente && !calcif_patologica && !corio_presente;
 
-                if (no_lesioni && villi_stato === 'maturi' && ega_istologia === 'compatibile') {
+                if (corio_presente) {
+                    const mir = document.getElementById('corio_mir').value;
+                    const fir = document.getElementById('corio_fir').value;
+                    const fir_severa = fir === 'FIR 3';
+                    if (fir_severa) {
+                        conclusione = `<strong>URGENTE — Corioamnionite con risposta fetale severa (${fir}).</strong> Funisite necrotizzante: alto rischio di sepsi neonatale e danno neurologico. Workup neonatale urgente: emocolture, PCR, proteina C reattiva. Antibioticoterapia neonatale empirica da valutare. Correlazione urgente con neonatologia.`;
+                    } else {
+                        conclusione = `<strong>Corioamnionite ${mir}${fir !== 'Nessuna' ? ', ' + fir : ' senza risposta fetale'}.</strong> Correlare con quadro clinico materno (febbre, leucocitosi). Workup neonatale: emocolture, PCR se FIR presente. Antibioticoterapia neonatale da valutare in base alla clinica.`;
+                    }
+                } else if (no_lesioni && villi_stato === 'maturi' && ega_istologia === 'compatibile') {
                     conclusione = `Esame istologico senza alterazioni significative. Struttura e maturazione placentare pienamente compatibile con EGA clinica di ${ega_clinica} settimane. Villi maturi, assenza di lesioni patologiche, adeguata funzione placentare. Follow-up ostetrico standard.`;
                 } else if (solo_calcif_scarsa && villi_stato === 'maturi') {
                     conclusione = `Calcificazioni scarse, completamente fisiologiche a termine. Marker di maturazione placentare normale. Nessun significato patologico. Follow-up clinico standard.`;
                 } else if (infarti_presente && !villite_presente && !calcif_patologica) {
                     conclusione = `<strong>Insufficienza placentare cronica con infarti placentari.</strong> Workup consigliato: screening trombofilgia materna (fattore V Leiden, G20210A, proteina C/S), anticorpi antifosfolipidi, counseling ostetrico per gestioni future. Correlazione urgente con clinica ostetrica (pressione, oligoidramnios, ecografia).`;
                 } else if (!infarti_presente && villite_presente && !calcif_patologica) {
-                    conclusione = `<strong>URGENTE - Villite fortemente sospetta per infezione congenita.</strong> Workup STAT: serologica materna (CMV, toxo, sifilide, listeria, varicella, parvovirus), PCR liquor neonatale, ricerca patogeni. Follow-up pediatrico multidisciplinare urgente (neurologia, audiologia, oftalmologia). Alto rischio di sequele neonatali.`;
+                    if (villite_eziologia === 'Infettiva') {
+                        conclusione = `<strong>URGENTE — Villite con sospetto infettivo.</strong> Workup STAT: sierologia materna (CMV, toxoplasma, sifilide, listeria, varicella, parvovirus B19), PCR su liquido amniotico/liquor neonatale se indicato. Follow-up pediatrico multidisciplinare urgente (neurologia, audiologia, oftalmologia). Alto rischio di sequele neonatali.`;
+                    } else {
+                        conclusione = `<strong>Villite di Eziologia Sconosciuta (VUE).</strong> Pattern immunomediato materno-fetale, non richiede workup infettivo urgente. Counseling: rischio di ricorrenza 10-15% nelle gravidanze successive. Correlazione con storia materna (patologie autoimmuni, perdite ricorrenti). Follow-up ostetrico nelle gravidanze future.`;
+                    }
                 } else if (!infarti_presente && !villite_presente && calcif_patologica) {
                     conclusione = `Calcificazioni patologiche suggestive di stress placentare cronico. Workup: escludere preeclampsia, ipertensione, IUGR. Screening trombofilgia se preeclampsia ricorrente. Counseling su rischio ricorrenza in gravidanze future.`;
                 } else {
